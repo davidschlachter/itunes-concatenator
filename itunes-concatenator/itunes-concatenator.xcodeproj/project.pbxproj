@@ -16,7 +16,6 @@
 		6343468B19ACE1AA008396D2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6343468919ACE1AA008396D2 /* MainMenu.xib */; };
 		6343468D19ACE1AA008396D2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6343468C19ACE1AA008396D2 /* Images.xcassets */; };
 		63C650BD19ACEB42008396D2 /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 63C650BC19ACEB42008396D2 /* Notes.txt */; };
-		63C650BF19ACFE31008396D2 /* checkforffmpeg.sh in Resources */ = {isa = PBXBuildFile; fileRef = 63C650BE19ACFE31008396D2 /* checkforffmpeg.sh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,7 +34,6 @@
 		6343468A19ACE1AA008396D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6343468C19ACE1AA008396D2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		63C650BC19ACEB42008396D2 /* Notes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
-		63C650BE19ACFE31008396D2 /* checkforffmpeg.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = checkforffmpeg.sh; path = ../checkforffmpeg.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,7 +101,6 @@
 		6343467C19ACE1AA008396D2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				63C650BE19ACFE31008396D2 /* checkforffmpeg.sh */,
 				6343467D19ACE1AA008396D2 /* itunes-concatenator-Info.plist */,
 				6343467E19ACE1AA008396D2 /* InfoPlist.strings */,
 				6343468119ACE1AA008396D2 /* main.m */,
@@ -166,7 +163,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63C650BF19ACFE31008396D2 /* checkforffmpeg.sh in Resources */,
 				6343468019ACE1AA008396D2 /* InfoPlist.strings in Resources */,
 				6343468D19ACE1AA008396D2 /* Images.xcassets in Resources */,
 				6343468619ACE1AA008396D2 /* Credits.rtf in Resources */,
