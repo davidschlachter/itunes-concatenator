@@ -37,6 +37,10 @@ script DASAppDelegate
     property pcatDisc : ""
     property pcatDiscs : ""
     
+    -- Run NSTask to see if ffmpeg is installed...
+
+    
+    
 	
 	on applicationWillFinishLaunching_(aNotification)
 		-- Insert code here to initialize your application before any files are opened 
