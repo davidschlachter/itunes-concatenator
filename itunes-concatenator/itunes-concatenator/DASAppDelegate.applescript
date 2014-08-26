@@ -38,7 +38,12 @@ script DASAppDelegate
     
     -- Run NSTask to see if ffmpeg is installed...
     on awakeFromNib()
+        --
         -- Check for FFMPEG
+        --
+        -- (This works, but it's ugly!)
+        --
+        --
         try
             do shell script "if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi; if [ -x \"`/usr/bin/which ffmpeg`\" ];then exit 0;else exit 1;fi"
         on error number error_number
