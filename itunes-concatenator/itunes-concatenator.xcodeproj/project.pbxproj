@@ -15,6 +15,7 @@
 		6343468819ACE1AA008396D2 /* DASAppDelegate.applescript in Sources */ = {isa = PBXBuildFile; fileRef = 6343468719ACE1AA008396D2 /* DASAppDelegate.applescript */; };
 		6343468B19ACE1AA008396D2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6343468919ACE1AA008396D2 /* MainMenu.xib */; };
 		6343468D19ACE1AA008396D2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6343468C19ACE1AA008396D2 /* Images.xcassets */; };
+		63C650BD19ACEB42008396D2 /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 63C650BC19ACEB42008396D2 /* Notes.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		6343468719ACE1AA008396D2 /* DASAppDelegate.applescript */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.applescript; path = DASAppDelegate.applescript; sourceTree = "<group>"; };
 		6343468A19ACE1AA008396D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6343468C19ACE1AA008396D2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		63C650BC19ACEB42008396D2 /* Notes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 				6343468919ACE1AA008396D2 /* MainMenu.xib */,
 				6343468C19ACE1AA008396D2 /* Images.xcassets */,
 				6343467C19ACE1AA008396D2 /* Supporting Files */,
+				63C650BC19ACEB42008396D2 /* Notes.txt */,
 			);
 			path = "itunes-concatenator";
 			sourceTree = "<group>";
@@ -164,6 +167,7 @@
 				6343468D19ACE1AA008396D2 /* Images.xcassets in Resources */,
 				6343468619ACE1AA008396D2 /* Credits.rtf in Resources */,
 				6343468B19ACE1AA008396D2 /* MainMenu.xib in Resources */,
+				63C650BD19ACEB42008396D2 /* Notes.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +328,7 @@
 				6343469219ACE1AA008396D2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
