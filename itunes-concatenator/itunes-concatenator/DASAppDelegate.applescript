@@ -12,6 +12,9 @@ property NSMutableArray : class "NSMutableArray"
 script DASAppDelegate
 	property parent : class "NSObject"
 	
+    global these_files, these_titles
+    property these_titles : {}
+    
 	-- IBOutlets
 	property window : missing value
     property trackTable : missing value
@@ -36,7 +39,6 @@ script DASAppDelegate
     property pcatDisc : ""
     property pcatDiscs : ""
     
-    -- Run NSTask to see if ffmpeg is installed...
     on awakeFromNib()
         --
         -- Check for FFMPEG
@@ -72,19 +74,38 @@ script DASAppDelegate
                 current application's NSApp's terminate()
             end If
         end try
-
-    
-    
     end awakeFromNib
-    
-	
+
+
+    on btnGetTracks_(sender)
+    -- Code to add iTunes tracks to our array and / or table
+    -- via http://dougscripts.com/itunes/itinfo/info02.php
+    tell application "iTunes"
+        set these_titles to {}
+        set these_files to {}
+        if selection is not {} then -- there ARE tracks selected...
+            set mySelection to selection
+            repeat with aTrack in mySelection
+                if class of aTrack is file track then
+                    set end of these_titles to ((name of aTrack) as string)
+                    set end of these_files to (get location of aTrack)
+                    display dialog these_files
+                    display dialog these_titles
+                end if
+            end repeat
+        end if
+    end tell
+    end btnGetTracks_
+
+
+
 	on applicationWillFinishLaunching_(aNotification)
-		-- Insert code here to initialize your application before any files are opened 
+		-- Insert code here to initialize your application before any files are opened
 	end applicationWillFinishLaunching_
-	
+
 	on applicationShouldTerminate_(sender)
-		-- Insert code here to do any housekeeping before your application quits 
+		-- Insert code here to do any housekeeping before your application quits
 		return current application's NSTerminateNow
 	end applicationShouldTerminate_
-	
+
 end script
