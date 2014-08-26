@@ -38,8 +38,15 @@ script DASAppDelegate
     property pcatDiscs : ""
     
     -- Run NSTask to see if ffmpeg is installed...
-
+    on awakeFromNib()
+        -- Check for FFMPEG
+    try
+        do shell script "if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi; if [ -x \"`/usr/bin/which ffmpeg`\" ];then exit 0;else exit 1;fi"
+        on error number error_number
+        display dialog "You must install FFMPEG to continue. \n\nYou may have to install Xcode Command Line Tools and Homebrew first. If you continue, we'll attempt to install them for you if they are not already present. \n\nIf you have already installed FFMPEG, ensure that it is in your bash path." buttons {"Cancel","Install FFMPEG"} default button 2
+    end try
     
+    end awakeFromNib
     
 	
 	on applicationWillFinishLaunching_(aNotification)
