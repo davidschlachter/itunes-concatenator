@@ -11,7 +11,7 @@
 script DASAppDelegate
 	property parent : class "NSObject"
 	
-    global these_files, these_times, these_titles
+    global these_files, these_times, these_titles, the_index
     
 	-- IBOutlets
 	property window : missing value
@@ -44,6 +44,7 @@ script DASAppDelegate
     property these_titles : {}
     property these_files : {}
     property these_times: {}
+    property the_index: {}
     
     on awakeFromNib()
         --
@@ -90,13 +91,16 @@ script DASAppDelegate
             set these_titles to {}
             set these_times to {}
             set these_files to {}
+            set the_index to {}
             if selection is not {} then -- there ARE tracks selected...
                 set mySelection to selection
+                set i to 1
                 repeat with aTrack in mySelection
                     if class of aTrack is file track then
                         set end of these_titles to ((name of aTrack) as string)
                         set end of these_times to ((time of aTrack) as string)
                         set end of these_files to (posix path of (get location of aTrack))
+                        set end of the_index to (count of these_titles)
                     end if
                 end repeat
             end if
@@ -110,8 +114,13 @@ script DASAppDelegate
     end btnGetTracks_
 
     on btnConcatenate_(sender)
+        say "We'll concatenate"
         repeat with theItem in these_titles
             say theItem
+        end repeat
+        repeat with theIndex in the_index
+            set the_shellscript to "/usr/bin/mkfifo /private/tmp/concat" & theIndex as text
+            do shell script the_shellscript
         end repeat
     end btnConcatenate_
 
