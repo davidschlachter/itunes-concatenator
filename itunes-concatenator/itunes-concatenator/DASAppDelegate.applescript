@@ -11,7 +11,7 @@
 script DASAppDelegate
 	property parent : class "NSObject"
 	
-    global these_files, these_titles
+    global these_files, these_times, these_titles
     
 	-- IBOutlets
 	property window : missing value
@@ -43,6 +43,7 @@ script DASAppDelegate
     
     property these_titles : {}
     property these_files : {}
+    property these_times: {}
     
     on awakeFromNib()
         --
@@ -87,12 +88,14 @@ script DASAppDelegate
         -- via http://dougscripts.com/itunes/itinfo/info02.php and http://www.randomsequence.com/articles/applescript-to-send-selected-itunes-tracks-using-mail/
         tell application "iTunes"
             set these_titles to {}
+            set these_times to {}
             set these_files to {}
             if selection is not {} then -- there ARE tracks selected...
                 set mySelection to selection
                 repeat with aTrack in mySelection
                     if class of aTrack is file track then
                         set end of these_titles to ((name of aTrack) as string)
+                        set end of these_times to ((time of aTrack) as string)
                         set end of these_files to (posix path of (get location of aTrack))
                     end if
                 end repeat
