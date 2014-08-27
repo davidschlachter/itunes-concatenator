@@ -7,13 +7,11 @@
 --
 
 -- via http://macscripter.net/viewtopic.php?pid=173787 ; apparently needed for using arrays
-property NSMutableArray : class "NSMutableArray"
 
 script DASAppDelegate
 	property parent : class "NSObject"
 	
     global these_files, these_titles
-    property these_titles : {}
     
 	-- IBOutlets
 	property window : missing value
@@ -38,6 +36,13 @@ script DASAppDelegate
     property pcatTracks : ""
     property pcatDisc : ""
     property pcatDiscs : ""
+    
+    -- Empty strings for each file name and location
+    property pEachName : ""
+    property pEachLocation : ""
+    
+    property these_titles : {}
+    property these_files : {}
     
     on awakeFromNib()
         --
@@ -78,25 +83,32 @@ script DASAppDelegate
 
 
     on btnGetTracks_(sender)
-    -- Code to add iTunes tracks to our array and / or table
-    -- via http://dougscripts.com/itunes/itinfo/info02.php
-    tell application "iTunes"
-        set these_titles to {}
-        set these_files to {}
-        if selection is not {} then -- there ARE tracks selected...
-            set mySelection to selection
-            repeat with aTrack in mySelection
-                if class of aTrack is file track then
-                    set end of these_titles to ((name of aTrack) as string)
-                    set end of these_files to (get location of aTrack)
-                    display dialog these_files
-                    display dialog these_titles
-                end if
-            end repeat
-        end if
-    end tell
+        -- Code to add iTunes tracks to our array and / or table
+        -- via http://dougscripts.com/itunes/itinfo/info02.php
+        tell application "iTunes"
+            set these_titles to {}
+            set these_files to {}
+            if selection is not {} then -- there ARE tracks selected...
+                set mySelection to selection
+                repeat with aTrack in mySelection
+                    if class of aTrack is file track then
+                        set end of these_titles to ((name of aTrack) as string)
+                        set end of these_files to (get location of aTrack)
+                    end if
+                end repeat
+            end if
+        end tell
+        -- Simple way to iterate through the list itemss
+        -- repeat with theItem in these_titles
+        --    say theItem
+        --  end repeat
     end btnGetTracks_
 
+    on btnConcatenate_(sender)
+        repeat with theItem in these_titles
+            say theItem
+        end repeat
+    end btnConcatenate_
 
 
 	on applicationWillFinishLaunching_(aNotification)
