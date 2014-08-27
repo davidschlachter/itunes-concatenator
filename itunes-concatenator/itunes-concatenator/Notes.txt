@@ -1,3 +1,6 @@
 We'll use ffmpeg to concatenate, but we'll ask for them to install it via Homebrew. This means we don't have to use the GPL.
 
 SublerCLI will do the chapterizing.
+
+http://stackoverflow.com/questions/18362914/is-there-a-way-to-package-bash-shell-scripts-with-applescriptobjc-app-on-macosx
+

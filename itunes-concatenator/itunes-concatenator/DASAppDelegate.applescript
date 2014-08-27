@@ -83,8 +83,8 @@ script DASAppDelegate
 
 
     on btnGetTracks_(sender)
-        -- Code to add iTunes tracks to our array and / or table
-        -- via http://dougscripts.com/itunes/itinfo/info02.php
+        -- Code to add iTunes tracks to our list
+        -- via http://dougscripts.com/itunes/itinfo/info02.php and http://www.randomsequence.com/articles/applescript-to-send-selected-itunes-tracks-using-mail/
         tell application "iTunes"
             set these_titles to {}
             set these_files to {}
@@ -93,15 +93,12 @@ script DASAppDelegate
                 repeat with aTrack in mySelection
                     if class of aTrack is file track then
                         set end of these_titles to ((name of aTrack) as string)
-                        set end of these_files to (get location of aTrack)
+                        set end of these_files to (posix path of (get location of aTrack))
                     end if
                 end repeat
             end if
         end tell
-        -- Simple way to iterate through the list itemss
-        -- repeat with theItem in these_titles
-        --    say theItem
-        --  end repeat
+        trackTable's setStringValue_(these_files)
     end btnGetTracks_
 
     on btnConcatenate_(sender)
