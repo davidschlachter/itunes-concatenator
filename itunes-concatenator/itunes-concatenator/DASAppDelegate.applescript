@@ -101,9 +101,8 @@ script DASAppDelegate
         -- via http://stackoverflow.com/questions/25537750/setstringvalue-with-applescript-list
         set olddelimeters to AppleScript's text item delimiters
         set AppleScript's text item delimiters to "\n"
-        set these_titles to these_titles as string
-        set AppleScript's text item delimiters to ""
-        trackTable's setStringValue_(these_titles)
+        set disp_titles to these_titles as string
+        trackTable's setStringValue_(disp_titles)
         set AppleScript's text item delimiters to olddelimeters
     end btnGetTracks_
 
