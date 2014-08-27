@@ -98,7 +98,13 @@ script DASAppDelegate
                 end repeat
             end if
         end tell
-        trackTable's setStringValue_(these_files)
+        -- via http://stackoverflow.com/questions/25537750/setstringvalue-with-applescript-list
+        set olddelimeters to AppleScript's text item delimiters
+        set AppleScript's text item delimiters to "\n"
+        set these_titles to these_titles as string
+        set AppleScript's text item delimiters to ""
+        trackTable's setStringValue_(these_titles)
+        set AppleScript's text item delimiters to olddelimeters
     end btnGetTracks_
 
     on btnConcatenate_(sender)
