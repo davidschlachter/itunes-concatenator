@@ -11,7 +11,7 @@
 script DASAppDelegate
 	property parent : class "NSObject"
 	
-    global these_files, these_times, these_titles, the_index
+    global these_files, these_times, these_titles, the_index, the_pipes
     
 	-- IBOutlets
 	property window : missing value
@@ -45,6 +45,7 @@ script DASAppDelegate
     property these_files : {}
     property these_times: {}
     property the_index: {}
+    property the_pipes: {}
     
     on awakeFromNib()
         --
@@ -114,14 +115,20 @@ script DASAppDelegate
     end btnGetTracks_
 
     on btnConcatenate_(sender)
-        say "We'll concatenate"
-        repeat with theItem in these_titles
-            say theItem
-        end repeat
+        -- Make the pipes
+        set the_pipes to {}
         repeat with theIndex in the_index
-            set the_shellscript to "/usr/bin/mkfifo /private/tmp/concat" & theIndex as text
-            do shell script the_shellscript
+            -- TODO: Needs error checking!
+            display dialog (item theIndex of these_files as text)
+            do shell script ("if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi;ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -bsf:v h264_mp4toannexb -f mpegts /private/tmp/concat" & theIndex & ".ts 2> /dev/null" as text)
+            log ("Processed file number" & theIndex) as text
+            set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
         end repeat
+        set olddelimeters to AppleScript's text item delimiters
+        set AppleScript's text item delimiters to "|"
+        set disp_thepipes to the_pipes as string
+        do shell script ("if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi;ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc /private/tmp/cat.mp4")
+        set AppleScript's text item delimiters to olddelimeters
     end btnConcatenate_
 
 
