@@ -136,6 +136,15 @@ script DASAppDelegate
     end btnGetTracks_
 
     on btnConcatenate_(sender)
+        -- Update the metadata variables with the user's input
+        set pcatArtist to catArtist's stringValue()
+        set pcatAlbum to catAlbum's stringValue()
+        set pcatComposer to catComposer's stringValue()
+        set pcatGenre to catGenre's stringValue()
+        set pcatTrack to catTrack's stringValue()
+        set pcatTracks to catTracks's stringValue()
+        set pcatDisc to catDisc's stringValue()
+        set pcatDiscs to catDiscs's stringValue()
         set the_pipes to {}
         repeat with theIndex in the_index
             -- TODO: Needs error checking!
@@ -151,13 +160,6 @@ script DASAppDelegate
         set disp_thepipes to the_pipes as string
         do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc /private/tmp/cat.mp4")
         set AppleScript's text item delimiters to olddelimeters
-        -- Log some debugging information
-        log (pcatArtist as string)
-        log (pcatAlbum as string)
-        log (pcatComposer as string)
-        log (pcatGenre as string)
-        log (pcatDisc as string)
-        log (pcatDiscs as string)
         -- Now let's create the chapter file
         repeat with theIndex in the_index
             if theIndex < 2 then
