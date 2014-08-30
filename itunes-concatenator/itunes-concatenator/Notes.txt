@@ -4,3 +4,4 @@ SublerCLI will do the chapterizing.
 
 http://stackoverflow.com/questions/18362914/is-there-a-way-to-package-bash-shell-scripts-with-applescriptobjc-app-on-macosx
 
+Chapters with MP4Box: http://forum.doom9.org/showthread.php?t=158296

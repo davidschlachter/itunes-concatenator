@@ -60,12 +60,12 @@ script DASAppDelegate
         try
             do shell script cmdPrefix & " if [ -x \"`/usr/bin/which ffmpeg`\" ];then exit 0;else exit 1;fi"
         on error number error_number
-            display dialog "You must install FFMPEG to continue. \n\nYou may have to install Xcode Command Line Tools and Homebrew first. If you continue, we'll attempt to install them for you if they are not already present. \n\nIf you have already installed FFMPEG, ensure that it is in your bash path." buttons {"Quit","Install FFMPEG"} default button 2
-            If button returned of result is "Install FFMPEG" then
+            display dialog "You must install FFMPEG and MP4v2 to continue. \n\nYou may have to install Xcode Command Line Tools and Homebrew first. If you continue, we'll attempt to install them for you if they are not already present. \n\nIf you have already installed FFMPEG and MP4v2, ensure that they are in your bash path." buttons {"Quit","Install"} default button 2
+            If button returned of result is "Install" then
                 try
                     tell application "Terminal"
                         -- TODO: This should be cleaner -- Terminal in front, only one window, focus back to the cat'er afterwards
-                        set newTab to do script cmdPrefix & "if [[ -x `which brew` ]];then brew install ffmpeg;else /usr/bin/ruby -e \"$(/usr/bin/curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)\";brew install ffmpeg;fi"
+                        set newTab to do script cmdPrefix & "if [[ -x `which brew` ]];then brew install ffmpeg;else /usr/bin/ruby -e \"$(/usr/bin/curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)\";brew install ffmpeg mp4v2;fi"
                         delay 4
                         repeat
                             delay 0.1
@@ -126,7 +126,8 @@ script DASAppDelegate
             log ("Processed file number" & theIndex) as text
             set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
         end repeat
-        -- Run the actual concatenation command in ffmpeg, via https://trac.ffmpeg.org/wiki/How%20to%20concatenate%20(join,%20merge)%20media%20files
+        -- Run the actual concatenation command in ffmpeg (for mp4/AAC files only!)
+        -- via https://trac.ffmpeg.org/wiki/How%20to%20concatenate%20(join,%20merge)%20media%20files
         set olddelimeters to AppleScript's text item delimiters
         set AppleScript's text item delimiters to "|"
         set disp_thepipes to the_pipes as string
@@ -135,18 +136,20 @@ script DASAppDelegate
         -- Now let's create the chapter file
         repeat with theIndex in the_index
             if theIndex < 2 then
-                do shell script ("/bin/echo \"00:00:00.000 " & (item theIndex of these_titles as text) & "\" > /private/tmp/chapters" as text)
+                do shell script ("/bin/echo \"00:00:00.000 " & (item theIndex of these_titles as text) & "\" > /private/tmp/cat.chapters.txt" as text)
                 set theCounter to (do shell script (cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\)\\.[0-9]*/\\1/'" as text) as string)
             else
                 set theDateStamp to do shell script (cmdPrefix & "t="& (theCounter as text) & ";((sec=t%60, t/=60, min=t%60, hrs=t/60));timestamp=$(printf \"%02d:%02d:%02d\" $hrs $min $sec);/bin/echo $timestamp" as text)
-                do shell script ("/bin/echo \"" & (theDateStamp as text) & ".000 " & (item theIndex of these_titles as text) & "\" >> /private/tmp/chapters" as text)
+                do shell script ("/bin/echo \"" & (theDateStamp as text) & ".000 " & (item theIndex of these_titles as text) & "\" >> /private/tmp/cat.chapters.txt" as text)
                 log ("Before the addition, theCounter is " & theCounter) as text
                 set theCounter to do shell script (cmdPrefix & "t=" & theCounter & ";t=`echo $t\"+\\`ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\)\\.[0-9]*/\\1/'\\`\" | bc`;echo $t" as text)
                 log ("After the addition, theCounter is " & theCounter) as text
             end if
         end repeat
+        -- Chapterize cat.mp4
+        do shell script (cmdPrefix & "mp4chaps -i /private/tmp/cat.mp4" as text)
         -- Clean up
-        -- do shell script "/bin/rm /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/chapters"
+        do shell script "/bin/rm /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.mp4"
         set theCounter to ""
     end btnConcatenate_
 
