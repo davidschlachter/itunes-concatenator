@@ -119,12 +119,20 @@ script DASAppDelegate
                 end repeat
             end if
         end tell
+        -- Display the songs to be concatenated
         -- via http://stackoverflow.com/questions/25537750/setstringvalue-with-applescript-list
         set olddelimeters to AppleScript's text item delimiters
         set AppleScript's text item delimiters to "\n"
         set disp_titles to these_titles as string
         trackTable's setStringValue_(disp_titles)
         set AppleScript's text item delimiters to olddelimeters
+        -- Update the default metadata
+        catArtist's setStringValue_(pcatArtist)
+        catAlbum's setStringValue_(pcatAlbum)
+        catComposer's setStringValue_(pcatComposer)
+        catGenre's setStringValue_(pcatGenre)
+        catDisc's setStringValue_(pcatDisc)
+        catDiscs's setStringValue_(pcatDiscs)
     end btnGetTracks_
 
     on btnConcatenate_(sender)
