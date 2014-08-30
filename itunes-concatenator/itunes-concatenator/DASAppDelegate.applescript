@@ -11,7 +11,7 @@
 script DASAppDelegate
 	property parent : class "NSObject"
 	
-    global these_files, these_times, these_titles, the_index, the_pipes, theCounter
+    global these_files, these_times, these_titles, the_index, the_pipes, theCounter, cmdPrefix
     
 	-- IBOutlets
 	property window : missing value
@@ -48,6 +48,7 @@ script DASAppDelegate
     property the_pipes: {}
     
     property theCounter : ""
+    property cmdPrefix : "if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi;"
     
     on awakeFromNib()
         --
@@ -57,14 +58,14 @@ script DASAppDelegate
         --
         --
         try
-            do shell script "if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi; if [ -x \"`/usr/bin/which ffmpeg`\" ];then exit 0;else exit 1;fi"
+            do shell script cmdPrefix & " if [ -x \"`/usr/bin/which ffmpeg`\" ];then exit 0;else exit 1;fi"
         on error number error_number
             display dialog "You must install FFMPEG to continue. \n\nYou may have to install Xcode Command Line Tools and Homebrew first. If you continue, we'll attempt to install them for you if they are not already present. \n\nIf you have already installed FFMPEG, ensure that it is in your bash path." buttons {"Quit","Install FFMPEG"} default button 2
             If button returned of result is "Install FFMPEG" then
                 try
                     tell application "Terminal"
                         -- TODO: This should be cleaner -- Terminal in front, only one window, focus back to the cat'er afterwards
-                        set newTab to do script "if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi;if [[ -x `which brew` ]];then brew install ffmpeg;else /usr/bin/ruby -e \"$(/usr/bin/curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)\";brew install ffmpeg;fi"
+                        set newTab to do script cmdPrefix & "if [[ -x `which brew` ]];then brew install ffmpeg;else /usr/bin/ruby -e \"$(/usr/bin/curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)\";brew install ffmpeg;fi"
                         delay 4
                         repeat
                             delay 0.1
@@ -121,7 +122,7 @@ script DASAppDelegate
         repeat with theIndex in the_index
             -- TODO: Needs error checking!
             -- TODO: We need to check what kind of audio files we have, then adjust accordingly
-            do shell script ("if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi;ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -bsf:v h264_mp4toannexb -f mpegts /private/tmp/concat" & theIndex & ".ts 2> /dev/null" as text)
+            do shell script (cmdPrefix & "ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -bsf:v h264_mp4toannexb -f mpegts /private/tmp/concat" & theIndex & ".ts 2> /dev/null" as text)
             log ("Processed file number" & theIndex) as text
             set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
         end repeat
@@ -129,18 +130,18 @@ script DASAppDelegate
         set olddelimeters to AppleScript's text item delimiters
         set AppleScript's text item delimiters to "|"
         set disp_thepipes to the_pipes as string
-        do shell script ("if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi;ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc /private/tmp/cat.mp4")
+        do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc /private/tmp/cat.mp4")
         set AppleScript's text item delimiters to olddelimeters
         -- Now let's create the chapter file
         repeat with theIndex in the_index
             if theIndex < 2 then
-                do shell script ("/bin/echo \"00:00:00 " & (item theIndex of these_titles as text) & "\" > /private/tmp/chapters" as text)
-                set theCounter to (do shell script ("if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi;ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\)\\.[0-9]*/\\1/'" as text) as string)
+                do shell script ("/bin/echo \"00:00:00.000 " & (item theIndex of these_titles as text) & "\" > /private/tmp/chapters" as text)
+                set theCounter to (do shell script (cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\)\\.[0-9]*/\\1/'" as text) as string)
             else
-                set theDateStamp to do shell script ("if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi;t="& (theCounter as text) & ";((sec=t%60, t/=60, min=t%60, hrs=t/60));timestamp=$(printf \"%02d:%02d:%02d\" $hrs $min $sec);/bin/echo $timestamp" as text)
-                do shell script ("/bin/echo \"" & (theDateStamp as text) & " " & (item theIndex of these_titles as text) & "\" >> /private/tmp/chapters" as text)
+                set theDateStamp to do shell script (cmdPrefix & "t="& (theCounter as text) & ";((sec=t%60, t/=60, min=t%60, hrs=t/60));timestamp=$(printf \"%02d:%02d:%02d\" $hrs $min $sec);/bin/echo $timestamp" as text)
+                do shell script ("/bin/echo \"" & (theDateStamp as text) & ".000 " & (item theIndex of these_titles as text) & "\" >> /private/tmp/chapters" as text)
                 log ("Before the addition, theCounter is " & theCounter) as text
-                set theCounter to do shell script ("if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi;t=" & theCounter & ";t=`echo $t\"+\\`ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\)\\.[0-9]*/\\1/'\\`\" | bc`;echo $t" as text)
+                set theCounter to do shell script (cmdPrefix & "t=" & theCounter & ";t=`echo $t\"+\\`ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\)\\.[0-9]*/\\1/'\\`\" | bc`;echo $t" as text)
                 log ("After the addition, theCounter is " & theCounter) as text
             end if
         end repeat
