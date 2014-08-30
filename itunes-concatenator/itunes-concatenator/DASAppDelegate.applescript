@@ -52,7 +52,7 @@ script DASAppDelegate
     
     on awakeFromNib()
         --
-        -- Check for FFMPEG
+        -- Check for FFMPEG and MP4v2
         --
         -- (This works, but it's ugly!)
         --
@@ -105,6 +105,16 @@ script DASAppDelegate
                         set end of these_times to ((time of aTrack) as string)
                         set end of these_files to (posix path of (get location of aTrack))
                         set end of the_index to (count of these_titles)
+                        -- Get metadata from the first track
+                        if i is 1 then
+                            set pcatArtist to ((artist of aTrack) as string)
+                            set pcatAlbum to ((album of aTrack) as string)
+                            set pcatComposer to ((composer of aTrack) as string)
+                            set pcatGenre to ((genre of aTrack) as string)
+                            set pcatDisc to ((disc number of aTrack) as string)
+                            set pcatDiscs to ((disc count of aTrack) as string)
+                        end if
+                        set i to (i + 1)
                     end if
                 end repeat
             end if
@@ -133,6 +143,13 @@ script DASAppDelegate
         set disp_thepipes to the_pipes as string
         do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc /private/tmp/cat.mp4")
         set AppleScript's text item delimiters to olddelimeters
+        -- Log some debugging information
+        log (pcatArtist as string)
+        log (pcatAlbum as string)
+        log (pcatComposer as string)
+        log (pcatGenre as string)
+        log (pcatDisc as string)
+        log (pcatDiscs as string)
         -- Now let's create the chapter file
         repeat with theIndex in the_index
             if theIndex < 2 then
