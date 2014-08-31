@@ -14,16 +14,16 @@
         <customObject id="Voe-Tx-rLC" customClass="DASAppDelegate">
             <connections>
                 <outlet property="catAlbum" destination="Gkw-wO-W1q" id="QuD-GX-1Rz"/>
-                <outlet property="catAlbumArtist" destination="bZo-Ho-Rcz" id="4Ci-lD-Dmq"/>
+                <outlet property="catAlbumArtist" destination="uqv-cP-eA2" id="q4l-GP-okB"/>
                 <outlet property="catArtist" destination="Jbw-0F-Xev" id="gjY-Ed-9v3"/>
                 <outlet property="catComposer" destination="Nca-aa-6gz" id="s86-Bd-hbx"/>
                 <outlet property="catDisc" destination="8uJ-Y0-LZw" id="xyr-1D-ojd"/>
                 <outlet property="catDiscs" destination="pcf-8a-heY" id="q8n-tc-wSh"/>
                 <outlet property="catGenre" destination="4nl-PB-yJ9" id="S9x-zY-eV8"/>
                 <outlet property="catName" destination="rgk-Bi-kNg" id="CgR-L7-jMU"/>
-                <outlet property="catTrack" destination="aSi-4N-lna" id="CDi-zg-gpn"/>
+                <outlet property="catTrack" destination="aSi-4N-lna" id="5f0-ZW-Ohz"/>
                 <outlet property="catTracks" destination="gis-qb-TSE" id="L19-UQ-M8d"/>
-                <outlet property="catYear" destination="U3i-6A-OFx" id="gHE-9J-1ux"/>
+                <outlet property="catYear" destination="hVz-yN-KRE" id="pmF-rj-WB8"/>
                 <outlet property="trackTable" destination="Unh-uq-Lfy" id="kY2-AZ-pNp"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
@@ -773,22 +773,6 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField identifier="catArtist" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bZo-Ho-Rcz">
-                        <rect key="frame" x="123" y="253" width="331" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="s2P-u6-tJt">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                        <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="pcatArtist" id="MBf-p7-Yzg">
-                                <dictionary key="options">
-                                    <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                </dictionary>
-                            </binding>
-                        </connections>
-                    </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sle-GK-AnP">
                         <rect key="frame" x="34" y="256" width="84" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -897,22 +881,6 @@
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
-                    </textField>
-                    <textField identifier="catTrack" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U3i-6A-OFx">
-                        <rect key="frame" x="123" y="115" width="72" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="RNb-7I-oQ4">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                        <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="pcatTrack" id="Kwg-uN-MEB">
-                                <dictionary key="options">
-                                    <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                </dictionary>
-                            </binding>
-                        </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dny-1u-iDN">
                         <rect key="frame" x="82" y="118" width="32" height="17"/>
@@ -1075,6 +1043,24 @@
                         <rect key="frame" x="20" y="420" width="513" height="136"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="YuF-2g-YEg">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField identifier="catAlbumArtist" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uqv-cP-eA2">
+                        <rect key="frame" x="123" y="253" width="331" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="KaB-BY-pmc">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hVz-yN-KRE">
+                        <rect key="frame" x="123" y="115" width="72" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="UKt-om-YJI">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
