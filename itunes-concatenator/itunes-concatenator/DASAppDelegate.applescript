@@ -141,6 +141,10 @@ script DASAppDelegate
         catDiscs's setStringValue_(pcatDiscs)
         catAlbumArtist's setStringValue_(pcatAlbumArtist)
         catYear's setStringValue_(pcatYear)
+        -- Reset the name and track fields
+        catName's setStringValue_("")
+        catTrack's setStringValue_("")
+        catTracks's setStringValue_("")
     end btnGetTracks_
 
     on btnConcatenate_(sender)
