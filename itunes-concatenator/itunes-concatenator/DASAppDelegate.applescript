@@ -194,9 +194,7 @@ script DASAppDelegate
         -- Add the finished track to iTunes
         do shell script "/bin/mv /private/tmp/cat.mp4 /private/tmp/cat.m4a"
         tell application "iTunes"
-            try
-                add "/private/tmp/cat.m4a"
-            end try
+                add file ":private:tmp:cat.m4a"
         end tell
         -- Clean up
         do shell script "/bin/rm /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4a"
