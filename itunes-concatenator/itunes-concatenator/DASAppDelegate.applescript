@@ -175,13 +175,16 @@ script DASAppDelegate
         repeat with theIndex in the_index
             if theIndex < 2 then
                 do shell script ("/bin/echo \"00:00:00.000 " & (item theIndex of these_titles as text) & "\" > /private/tmp/cat.chapters.txt" as text)
-                set theCounter to (do shell script (cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\)\\.[0-9]*/\\1/'" as text) as string)
+                set theCounter to (do shell script (cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\.[0-9]*\\)/\\1/'" as text) as string)
+                set theCounter to (do shell script ("/bin/echo $(/usr/bin/printf %.$2f $(/bin/echo \"`/usr/bin/printf %.3f " & theCounter & "` * 1000\" | /usr/bin/bc))") as string)
             else
-                set theDateStamp to do shell script (cmdPrefix & "t="& (theCounter as text) & ";((sec=t%60, t/=60, min=t%60, hrs=t/60));timestamp=$(printf \"%02d:%02d:%02d\" $hrs $min $sec);/bin/echo $timestamp" as text)
-                do shell script ("/bin/echo \"" & (theDateStamp as text) & ".000 " & (item theIndex of these_titles as text) & "\" >> /private/tmp/cat.chapters.txt" as text)
-                log ("Before the addition, theCounter is " & theCounter) as text
-                set theCounter to do shell script (cmdPrefix & "t=" & theCounter & ";t=`echo $t\"+\\`ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\)\\.[0-9]*/\\1/'\\`\" | bc`;echo $t" as text)
-                log ("After the addition, theCounter is " & theCounter) as text
+                set theDateStamp to do shell script (cmdPrefix & "t="& (theCounter as text) & ";((msec=t%1000, t/=1000, sec=t%60, t/=60, min=t%60, hrs=t/60));timestamp=$(printf \"%02d:%02d:%02d.%03d\" $hrs $min $sec $msec);/bin/echo $timestamp" as text)
+                do shell script ("/bin/echo \"" & (theDateStamp as text) & " " & (item theIndex of these_titles as text) & "\" >> /private/tmp/cat.chapters.txt" as text)
+                set theNewCounter to do shell script ((cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\.[0-9]*\\)/\\1/'" as text) as string)
+                set theNewCounter to do shell script ("/bin/echo $(/usr/bin/printf %.$2f $(/bin/echo \"`/usr/bin/printf %.3f " & theNewCounter & "` * 1000\" | /usr/bin/bc))") as string
+                log "theNewCounter is " & theNewCounter
+                set theCounter to (theCounter + theNewCounter)
+                log ("Post-addition, theCounter is " & theCounter) as text
             end if
         end repeat
         -- Chapterize cat.mp4
