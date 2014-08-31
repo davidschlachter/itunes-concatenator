@@ -25,6 +25,8 @@ script DASAppDelegate
     property catTracks : missing value
     property catDisc : missing value
     property catDiscs : missing value
+    property catAlbumArtist : missing value
+    property catYear : missing value
     
     -- Again, per macscripter, we'll set up bindings for the options
     property pcatName : ""
@@ -36,6 +38,8 @@ script DASAppDelegate
     property pcatTracks : ""
     property pcatDisc : ""
     property pcatDiscs : ""
+    property pcatAlbumArtist : ""
+    property pcatYear : ""
     
     -- Empty strings for each file name and location
     property pEachName : ""
@@ -113,6 +117,8 @@ script DASAppDelegate
                             set pcatGenre to ((genre of aTrack) as string)
                             set pcatDisc to ((disc number of aTrack) as string)
                             set pcatDiscs to ((disc count of aTrack) as string)
+                            set pcatAlbumArtist to ((album artist of aTrack) as string)
+                            set pcatYear to ((year of aTrack) as string)
                         end if
                         set i to (i + 1)
                     end if
@@ -133,6 +139,8 @@ script DASAppDelegate
         catGenre's setStringValue_(pcatGenre)
         catDisc's setStringValue_(pcatDisc)
         catDiscs's setStringValue_(pcatDiscs)
+        catAlbumArtist's setStringValue_(pcatAlbumArtist)
+        catYear's setStringValue_(pcatYear)
     end btnGetTracks_
 
     on btnConcatenate_(sender)
@@ -146,6 +154,8 @@ script DASAppDelegate
         set pcatTracks to catTracks's stringValue()
         set pcatDisc to catDisc's stringValue()
         set pcatDiscs to catDiscs's stringValue()
+        set pcatAlbumArtist to catAlbumArtist's stringValue()
+        set pcatYear to catYear's stringValue()
         set the_pipes to {}
         repeat with theIndex in the_index
             -- TODO: Needs error checking!
@@ -177,7 +187,7 @@ script DASAppDelegate
         -- Chapterize cat.mp4
         do shell script (cmdPrefix & "mp4chaps -i /private/tmp/cat.mp4" as text)
         -- Add tags
-        do shell script (cmdPrefix & "mp4tags -song \"" & pcatName & "\" -album \"" &  pcatAlbum & "\" -artist \"" &  pcatArtist & "\" -writer \"" &  pcatComposer & "\" -genre \"" &  pcatGenre & "\" -track \"" &  pcatTrack & "\" -tracks \"" &  pcatTracks & "\" -disk \"" &  pcatDisc & "\" -disks \"" &  pcatDiscs & "\" /private/tmp/cat.mp4" as text)
+        do shell script (cmdPrefix & "mp4tags -song \"" & pcatName & "\" -album \"" &  pcatAlbum & "\" -artist \"" &  pcatArtist & "\" -writer \"" &  pcatComposer & "\" -genre \"" &  pcatGenre & "\" -track \"" &  pcatTrack & "\" -tracks \"" &  pcatTracks & "\" -disk \"" &  pcatDisc & "\" -disks \"" &  pcatDiscs & "\" -albumartist \"" & pcatAlbumArtist & "\" -year \"" & pcatYear & "\" /private/tmp/cat.mp4" as text)
         -- Clean up
         do shell script "/bin/rm /private/tmp/concat* /private/tmp/cat.chapters.txt #/private/tmp/cat.mp4"
         set theCounter to ""
