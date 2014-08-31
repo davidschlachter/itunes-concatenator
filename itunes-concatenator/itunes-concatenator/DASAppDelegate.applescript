@@ -137,6 +137,7 @@ script DASAppDelegate
 
     on btnConcatenate_(sender)
         -- Update the metadata variables with the user's input
+        set pcatName to catName's stringValue()
         set pcatArtist to catArtist's stringValue()
         set pcatAlbum to catAlbum's stringValue()
         set pcatComposer to catComposer's stringValue()
@@ -175,8 +176,10 @@ script DASAppDelegate
         end repeat
         -- Chapterize cat.mp4
         do shell script (cmdPrefix & "mp4chaps -i /private/tmp/cat.mp4" as text)
+        -- Add tags
+        do shell script (cmdPrefix & "mp4tags -song \"" & pcatName & "\" -album \"" &  pcatAlbum & "\" -artist \"" &  pcatArtist & "\" -writer \"" &  pcatComposer & "\" -genre \"" &  pcatGenre & "\" -track \"" &  pcatTrack & "\" -tracks \"" &  pcatTracks & "\" -disk \"" &  pcatDisc & "\" -disks \"" &  pcatDiscs & "\" /private/tmp/cat.mp4" as text)
         -- Clean up
-        do shell script "/bin/rm /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.mp4"
+        do shell script "/bin/rm /private/tmp/concat* /private/tmp/cat.chapters.txt #/private/tmp/cat.mp4"
         set theCounter to ""
     end btnConcatenate_
 
