@@ -195,11 +195,11 @@ script DASAppDelegate
         do shell script "/bin/mv /private/tmp/cat.mp4 /private/tmp/cat.m4a"
         tell application "iTunes"
             try
-                add "/private/tmp/cat.mp4"
+                add "/private/tmp/cat.m4a"
             end try
         end tell
         -- Clean up
-        do shell script "/bin/rm /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.mp4"
+        do shell script "/bin/rm /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4a"
         set theCounter to ""
     end btnConcatenate_
 
