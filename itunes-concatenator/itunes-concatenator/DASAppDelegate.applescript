@@ -191,8 +191,15 @@ script DASAppDelegate
         do shell script (cmdPrefix & "mp4chaps -i /private/tmp/cat.mp4" as text)
         -- Add tags
         do shell script (cmdPrefix & "mp4tags -song \"" & pcatName & "\" -album \"" &  pcatAlbum & "\" -artist \"" &  pcatArtist & "\" -writer \"" &  pcatComposer & "\" -genre \"" &  pcatGenre & "\" -track \"" &  pcatTrack & "\" -tracks \"" &  pcatTracks & "\" -disk \"" &  pcatDisc & "\" -disks \"" &  pcatDiscs & "\" -albumartist \"" & pcatAlbumArtist & "\" -year \"" & pcatYear & "\" /private/tmp/cat.mp4" as text)
+        -- Add the finished track to iTunes
+        do shell script "/bin/mv /private/tmp/cat.mp4 /private/tmp/cat.m4a"
+        tell application "iTunes"
+            try
+                add "/private/tmp/cat.mp4"
+            end try
+        end tell
         -- Clean up
-        do shell script "/bin/rm /private/tmp/concat* /private/tmp/cat.chapters.txt #/private/tmp/cat.mp4"
+        do shell script "/bin/rm /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.mp4"
         set theCounter to ""
     end btnConcatenate_
 
