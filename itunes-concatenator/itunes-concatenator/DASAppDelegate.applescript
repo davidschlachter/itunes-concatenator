@@ -69,10 +69,9 @@ script DASAppDelegate
             on error number error_number
             if missingPackages is "FFMPEG" then
                 set the end of missingPackages to "MP4v2 "
-                else
+            else
                 set missingPackages to "MP4v2 "
             end if
-            
         end try
         
         if missingPackages is not "" then
