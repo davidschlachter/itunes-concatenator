@@ -176,47 +176,93 @@ script DASAppDelegate
         set pcatAlbumArtist to catAlbumArtist's stringValue()
         set pcatYear to catYear's stringValue()
         set the_pipes to {}
-        repeat with theIndex in the_index
-            -- TODO: Needs error checking!
-            -- TODO: We need to check what kind of audio files we have, then adjust accordingly
-            do shell script (cmdPrefix & "ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -bsf:v h264_mp4toannexb -f mpegts /private/tmp/concat" & theIndex & ".ts 2> /dev/null" as text)
-            log ("Processed file number" & theIndex) as text
-            set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
-        end repeat
+        try
+            do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4a /private/tmp/cat.mp4"
+        end try
+        set errorHappened to false
+        try
+            repeat with theIndex in the_index
+                do shell script (cmdPrefix & "ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -bsf:v h264_mp4toannexb -f mpegts /private/tmp/concat" & theIndex & ".ts 2> /dev/null" as text)
+                log ("Processed file number" & theIndex) as text
+                set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
+            end repeat
+        on error error_number
+            set errorHappened to true
+            do shell script "/bin/rm -f /private/tmp/concat*"
+            display dialog "The tracks you selected could not be joined. Only mp4 files encoded as AAC can be joined presently."
+        end try
         -- Run the actual concatenation command in ffmpeg (for mp4/AAC files only!)
         -- via https://trac.ffmpeg.org/wiki/How%20to%20concatenate%20(join,%20merge)%20media%20files
-        set olddelimeters to AppleScript's text item delimiters
-        set AppleScript's text item delimiters to "|"
-        set disp_thepipes to the_pipes as string
-        do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc /private/tmp/cat.mp4")
-        set AppleScript's text item delimiters to olddelimeters
+        if not errorHappened then
+            try
+                set olddelimeters to AppleScript's text item delimiters
+                set AppleScript's text item delimiters to "|"
+                set disp_thepipes to the_pipes as string
+                do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc /private/tmp/cat.mp4")
+                set AppleScript's text item delimiters to olddelimeters
+            on error error_number
+                set errorHappened to true
+                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4"
+                display dialog "The tracks could not be joined."
+            end try
+        end if
         -- Now let's create the chapter file
-        repeat with theIndex in the_index
-            if theIndex < 2 then
-                do shell script ("/bin/echo \"00:00:00.000 " & (item theIndex of these_titles as text) & "\" > /private/tmp/cat.chapters.txt" as text)
-                set theCounter to (do shell script (cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\.[0-9]*\\)/\\1/'" as text) as string)
-                set theCounter to (do shell script ("/bin/echo $(/usr/bin/printf %.$2f $(/bin/echo \"`/usr/bin/printf %.3f " & theCounter & "` * 1000\" | /usr/bin/bc))") as string)
-            else
-                set theDateStamp to do shell script (cmdPrefix & "t="& (theCounter as text) & ";((msec=t%1000, t/=1000, sec=t%60, t/=60, min=t%60, hrs=t/60));timestamp=$(printf \"%02d:%02d:%02d.%03d\" $hrs $min $sec $msec);/bin/echo $timestamp" as text)
-                do shell script ("/bin/echo \"" & (theDateStamp as text) & " " & (item theIndex of these_titles as text) & "\" >> /private/tmp/cat.chapters.txt" as text)
-                set theNewCounter to do shell script ((cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\.[0-9]*\\)/\\1/'" as text) as string)
-                set theNewCounter to do shell script ("/bin/echo $(/usr/bin/printf %.$2f $(/bin/echo \"`/usr/bin/printf %.3f " & theNewCounter & "` * 1000\" | /usr/bin/bc))") as string
-                log "theNewCounter is " & theNewCounter
-                set theCounter to (theCounter + theNewCounter)
-                log ("Post-addition, theCounter is " & theCounter) as text
-            end if
-        end repeat
+        if not errorHappened then
+            try
+                repeat with theIndex in the_index
+                    if theIndex < 2 then
+                        do shell script ("/bin/echo \"00:00:00.000 " & (item theIndex of these_titles as text) & "\" > /private/tmp/cat.chapters.txt" as text)
+                        set theCounter to (do shell script (cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\.[0-9]*\\)/\\1/'" as text) as string)
+                        set theCounter to (do shell script ("/bin/echo $(/usr/bin/printf %.$2f $(/bin/echo \"`/usr/bin/printf %.3f " & theCounter & "` * 1000\" | /usr/bin/bc))") as string)
+                    else
+                        set theDateStamp to do shell script (cmdPrefix & "t="& (theCounter as text) & ";((msec=t%1000, t/=1000, sec=t%60, t/=60, min=t%60, hrs=t/60));timestamp=$(printf \"%02d:%02d:%02d.%03d\" $hrs $min $sec $msec);/bin/echo $timestamp" as text)
+                        do shell script ("/bin/echo \"" & (theDateStamp as text) & " " & (item theIndex of these_titles as text) & "\" >> /private/tmp/cat.chapters.txt" as text)
+                        set theNewCounter to do shell script ((cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\.[0-9]*\\)/\\1/'" as text) as string)
+                        set theNewCounter to do shell script ("/bin/echo $(/usr/bin/printf %.$2f $(/bin/echo \"`/usr/bin/printf %.3f " & theNewCounter & "` * 1000\" | /usr/bin/bc))") as string
+                        set theCounter to (theCounter + theNewCounter)
+                    end if
+                end repeat
+            on error error_number
+                set errorHappened to true
+                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
+                display dialog "The chapters could not be read from the tracks you had selected."
+            end try
+        end if
         -- Chapterize cat.mp4
-        do shell script (cmdPrefix & "mp4chaps -i /private/tmp/cat.mp4" as text)
+        if not errorHappened then
+            try
+                do shell script (cmdPrefix & "mp4chaps -i /private/tmp/cat.mp4" as text)
+            on error error_number
+                set errorHappened to true
+                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
+                display dialog "The chapters could not be added to concatenated file."
+            end try
+        end if
         -- Add tags
-        do shell script (cmdPrefix & "mp4tags -song \"" & pcatName & "\" -album \"" &  pcatAlbum & "\" -artist \"" &  pcatArtist & "\" -writer \"" &  pcatComposer & "\" -genre \"" &  pcatGenre & "\" -track \"" &  pcatTrack & "\" -tracks \"" &  pcatTracks & "\" -disk \"" &  pcatDisc & "\" -disks \"" &  pcatDiscs & "\" -albumartist \"" & pcatAlbumArtist & "\" -year \"" & pcatYear & "\" /private/tmp/cat.mp4" as text)
+        if not errorHappened then
+            try
+                do shell script (cmdPrefix & "mp4tags -song \"" & pcatName & "\" -album \"" &  pcatAlbum & "\" -artist \"" &  pcatArtist & "\" -writer \"" &  pcatComposer & "\" -genre \"" &  pcatGenre & "\" -track \"" &  pcatTrack & "\" -tracks \"" &  pcatTracks & "\" -disk \"" &  pcatDisc & "\" -disks \"" &  pcatDiscs & "\" -albumartist \"" & pcatAlbumArtist & "\" -year \"" & pcatYear & "\" /private/tmp/cat.mp4" as text)
+            on error error_number
+                set errorHappened to true
+                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
+                display dialog "The tags could not be added to the concatenated audio file."
+            end try
+        end if
         -- Add the finished track to iTunes
-        do shell script "/bin/mv /private/tmp/cat.mp4 /private/tmp/cat.m4a"
-        tell application "iTunes"
-                add file ":private:tmp:cat.m4a"
-        end tell
+        if not errorHappened then
+            try
+                do shell script "/bin/mv /private/tmp/cat.mp4 /private/tmp/cat.m4a"
+                tell application "iTunes"
+                        add file ":private:tmp:cat.m4a"
+                end tell
+            on error error_number
+                set errorHappened to true
+                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt /private/tmp/cat.m4a"
+                display dialog "The concatenated file could not be added to iTunes."
+            end try
+        end if
         -- Clean up
-        do shell script "/bin/rm /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4a"
+        do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4a"
         set theCounter to ""
     end btnConcatenate_
 
