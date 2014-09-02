@@ -27,6 +27,7 @@ script DASAppDelegate
     property catDiscs : missing value
     property catAlbumArtist : missing value
     property catYear : missing value
+    property radioType : missing value
     
     -- Again, per macscripter, we'll set up bindings for the options
     property pcatName : ""
@@ -41,6 +42,7 @@ script DASAppDelegate
     property pcatAlbumArtist : ""
     property pcatYear : ""
     property missingPackages : ""
+    property mediaTypeText : ""
     
     -- Empty strings for each file name and location
     property pEachName : ""
@@ -175,8 +177,9 @@ script DASAppDelegate
         set pcatAlbumArtist to catAlbumArtist's stringValue()
         set pcatYear to catYear's stringValue()
         set the_pipes to {}
+        set mediaTypeText to (radioType's titleOfSelectedItem()) as string
         try
-            do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4a /private/tmp/cat.mp4"
+            do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4* /private/tmp/cat.mp4"
         end try
         set errorHappened to false
         try
@@ -250,18 +253,23 @@ script DASAppDelegate
         -- Add the finished track to iTunes
         if not errorHappened then
             try
-                do shell script "/bin/mv /private/tmp/cat.mp4 /private/tmp/cat.m4a"
+                if mediaTypeText is "Music track" then
+                    set mediaType to "m4a"
+                else if mediaTypeText is "Audiobook track" then
+                    set mediaType to "m4b"
+                end if
+                do shell script ("/bin/mv /private/tmp/cat.mp4 /private/tmp/cat." & mediaType as text)
                 tell application "iTunes"
-                        add file ":private:tmp:cat.m4a"
+                    add file (":private:tmp:cat." & mediaType as text)
                 end tell
             on error error_number
                 set errorHappened to true
-                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt /private/tmp/cat.m4a"
+                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt /private/tmp/cat." & mediaType
                 display dialog "The concatenated file could not be added to iTunes."
             end try
         end if
         -- Clean up
-        do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4a"
+        do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4*"
         set theCounter to ""
     end btnConcatenate_
 
