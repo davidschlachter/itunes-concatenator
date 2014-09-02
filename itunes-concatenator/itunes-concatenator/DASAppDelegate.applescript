@@ -40,6 +40,7 @@ script DASAppDelegate
     property pcatDiscs : ""
     property pcatAlbumArtist : ""
     property pcatYear : ""
+    property missingPackages : ""
     
     -- Empty strings for each file name and location
     property pEachName : ""
@@ -55,40 +56,54 @@ script DASAppDelegate
     property cmdPrefix : "if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi;"
     
     on awakeFromNib()
-        --
-        -- Check for FFMPEG and MP4v2
-        --
-        -- (This works, but it's ugly!)
-        --
-        --
+        -- Check for FFMPEG in the path
         try
             do shell script cmdPrefix & " if [ -x \"`/usr/bin/which ffmpeg`\" ];then exit 0;else exit 1;fi"
-        on error number error_number
-            display dialog "You must install FFMPEG and MP4v2 to continue. \n\nYou may have to install Xcode Command Line Tools and Homebrew first. If you continue, we'll attempt to install them for you if they are not already present. \n\nIf you have already installed FFMPEG and MP4v2, ensure that they are in your bash path." buttons {"Quit","Install"} default button 2
-            If button returned of result is "Install" then
-                try
-                    tell application "Terminal"
-                        -- TODO: This should be cleaner -- Terminal in front, only one window, focus back to the cat'er afterwards
-                        set newTab to do script cmdPrefix & "if [[ -x `which brew` ]];then brew install ffmpeg;else /usr/bin/ruby -e \"$(/usr/bin/curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)\";brew install ffmpeg mp4v2;fi"
-                        delay 4
+            on error number error_number
+            set missingPackages to "FFMPEG "
+        end try
+        
+        -- Check for MP4v2 in the path
+        try
+            do shell script cmdPrefix & " if [ -x \"`/usr/bin/which mp4chaps`\" ];then exit 0;else exit 1;fi"
+            on error number error_number
+            if missingPackages is "FFMPEG" then
+                set the end of missingPackages to "MP4v2 "
+                else
+                set missingPackages to "MP4v2 "
+            end if
+            
+        end try
+        
+        if missingPackages is not "" then
+            display dialog "You must install the following programs to continue: \n\t" & missingPackages & " \n\nYou may have to install Xcode Command Line Tools and Homebrew first. If you continue, we'll attempt to install them for you if they are not already present. \n\nIf you have already installed FFMPEG and MP4v2, ensure that they are in your bash path." buttons {"Quit","Install"} default button 2
+            if result = {button returned:"Install"} then
+                tell application "Terminal"
+                    set newTab to do script cmdPrefix & "if [[ -x `which brew` ]];then brew install ffmpeg mp4v2 && exit 0;else /usr/bin/ruby -e \"$(/usr/bin/curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)\"; brew install ffmpeg mp4v2 && exit 0;fi"
+                    delay 1
+                    activate
+                    -- Check for when the Terminal is done
+                    try
                         repeat
-                            delay 0.1
+                            delay 0.2
                             if not busy of newTab then exit repeat
                         end repeat
-                    end tell
-                     -- TODO: This needs a better test, i.e., check if ffmpeg is actually accessible on the path
-                    display dialog "FFMPEG was successfully installed"
-                    -- TODO: This should actually work! (Bring us back to the foreground)
-                    activate current application
-                on error number error_number
-                    display dialog "FFMPEG did not successfully install"
+                    end try
+                end tell
+                -- Check if installation was successful
+                try
+                    do shell script cmdPrefix & " if [ -x \"`/usr/bin/which ffmpeg`\" -a -x \"`/usr/bin/which mp4chaps`\" ];then exit 0;else exit 1;fi"
+                    tell application "Terminal" to quit
+                    activate
+                    display dialog "Installation was successful!" buttons {"OK"} default button "OK"
+                    on error error_number
+                    activate
+                    display dialog "Homebrew, FFMPEG and/or MP4v2 could not be installed."
                 end try
-            end If
-            If button returned of result is "Quit" then
-                -- Fix!
-                current application's NSApp's terminate()
-            end If
-        end try
+                else if result = {button returned:"Quit"} then
+                tell me to quit
+            end if
+        end if
     end awakeFromNib
 
 
@@ -207,7 +222,7 @@ script DASAppDelegate
 
 
 	on applicationWillFinishLaunching_(aNotification)
-		-- Insert code here to initialize your application before any files are opened
+        -- Insert code here to initialize your application before any files are opened
 	end applicationWillFinishLaunching_
 
 	on applicationShouldTerminate_(sender)
