@@ -187,7 +187,7 @@ script DASAppDelegate
         -- Create the intermediate files
         try
             repeat with theIndex in the_index
-                progressField's setStringValue_("Processing track " & (theIndex as text) & "..." as text)
+                progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
                 delay 0.2
                 do shell script (cmdPrefix & "ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -f mpegts -loglevel fatal -vn /private/tmp/concat" & theIndex & ".ts" as text)
                 set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
