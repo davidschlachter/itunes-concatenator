@@ -179,6 +179,7 @@ script DASAppDelegate
         set pcatYear to catYear's stringValue()
         set the_pipes to {}
         set mediaTypeText to (radioType's titleOfSelectedItem()) as string
+        
         try
             do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4* /private/tmp/cat.mp4"
         end try
@@ -186,9 +187,9 @@ script DASAppDelegate
         -- Create the intermediate files
         try
             repeat with theIndex in the_index
-                progressField's setStringValue_("Processing track " & (item theIndex of these_files as text) & "..." as text)
+                progressField's setStringValue_("Processing track " & (theIndex as text) & "..." as text)
+                delay 0.2
                 do shell script (cmdPrefix & "ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -f mpegts -loglevel fatal -vn /private/tmp/concat" & theIndex & ".ts" as text)
-                log ("Processed file number" & theIndex) as text
                 set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
             end repeat
         on error error_number
@@ -204,7 +205,8 @@ script DASAppDelegate
                 set olddelimeters to AppleScript's text item delimiters
                 set AppleScript's text item delimiters to "|"
                 set disp_thepipes to the_pipes as string
-                progressField's setStringValue_("Now concatenating the audio files...")
+                progressField's setStringValue_("Concatenating tracks...")
+                delay 0.2
                 do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc -loglevel fatal /private/tmp/cat.mp4" as text)
                 set AppleScript's text item delimiters to olddelimeters
             on error error_number
@@ -217,6 +219,7 @@ script DASAppDelegate
         -- Now let's create the chapter file
         if not errorHappened then
             progressField's setStringValue_("Preparing chapters...")
+            delay 0.2
             try
                 repeat with theIndex in the_index
                     if theIndex < 2 then
@@ -242,6 +245,7 @@ script DASAppDelegate
         if not errorHappened then
             try
                 progressField's setStringValue_("Chapterizing...")
+                delay 0.2
                 do shell script (cmdPrefix & "mp4chaps -i /private/tmp/cat.mp4" as text)
             on error error_number
                 set errorHappened to true
@@ -254,6 +258,7 @@ script DASAppDelegate
         if not errorHappened then
             try
                 progressField's setStringValue_("Adding tags...")
+                delay 0.2
                 do shell script (cmdPrefix & "mp4tags -song \"" & pcatName & "\" -album \"" &  pcatAlbum & "\" -artist \"" &  pcatArtist & "\" -writer \"" &  pcatComposer & "\" -genre \"" &  pcatGenre & "\" -track \"" &  pcatTrack & "\" -tracks \"" &  pcatTracks & "\" -disk \"" &  pcatDisc & "\" -disks \"" &  pcatDiscs & "\" -albumartist \"" & pcatAlbumArtist & "\" -year \"" & pcatYear & "\" /private/tmp/cat.mp4" as text)
             on error error_number
                 set errorHappened to true
@@ -265,6 +270,7 @@ script DASAppDelegate
         -- Add the finished track to iTunes
         if not errorHappened then
             progressField's setStringValue_("Adding to iTunes...")
+            delay 0.2
             try
                 if mediaTypeText is "Music track" then
                     set mediaType to "m4a"
