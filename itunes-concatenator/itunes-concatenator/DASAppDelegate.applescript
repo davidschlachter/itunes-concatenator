@@ -28,6 +28,7 @@ script DASAppDelegate
     property catAlbumArtist : missing value
     property catYear : missing value
     property radioType : missing value
+    property progressField : missing value
     
     -- Again, per macscripter, we'll set up bindings for the options
     property pcatName : ""
@@ -182,15 +183,18 @@ script DASAppDelegate
             do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4* /private/tmp/cat.mp4"
         end try
         set errorHappened to false
+        -- Create the intermediate files
         try
             repeat with theIndex in the_index
-                do shell script (cmdPrefix & "ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -bsf:v h264_mp4toannexb -f mpegts /private/tmp/concat" & theIndex & ".ts 2> /dev/null" as text)
+                progressField's setStringValue_("Processing track " & (item theIndex of these_files as text) & "..." as text)
+                do shell script (cmdPrefix & "ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -f mpegts -loglevel fatal -vn /private/tmp/concat" & theIndex & ".ts" as text)
                 log ("Processed file number" & theIndex) as text
                 set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
             end repeat
         on error error_number
             set errorHappened to true
             do shell script "/bin/rm -f /private/tmp/concat*"
+            progressField's setStringValue_("")
             display dialog "The tracks you selected could not be joined. Only mp4 files encoded as AAC can be joined presently."
         end try
         -- Run the actual concatenation command in ffmpeg (for mp4/AAC files only!)
@@ -200,16 +204,19 @@ script DASAppDelegate
                 set olddelimeters to AppleScript's text item delimiters
                 set AppleScript's text item delimiters to "|"
                 set disp_thepipes to the_pipes as string
-                do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc /private/tmp/cat.mp4")
+                progressField's setStringValue_("Now concatenating the audio files...")
+                do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc -loglevel fatal /private/tmp/cat.mp4" as text)
                 set AppleScript's text item delimiters to olddelimeters
             on error error_number
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4"
+                progressField's setStringValue_("")
                 display dialog "The tracks could not be joined."
             end try
         end if
         -- Now let's create the chapter file
         if not errorHappened then
+            progressField's setStringValue_("Preparing chapters...")
             try
                 repeat with theIndex in the_index
                     if theIndex < 2 then
@@ -227,31 +234,37 @@ script DASAppDelegate
             on error error_number
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
+                progressField's setStringValue_("")
                 display dialog "The chapters could not be read from the tracks you had selected."
             end try
         end if
         -- Chapterize cat.mp4
         if not errorHappened then
             try
+                progressField's setStringValue_("Chapterizing...")
                 do shell script (cmdPrefix & "mp4chaps -i /private/tmp/cat.mp4" as text)
             on error error_number
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
+                progressField's setStringValue_("")
                 display dialog "The chapters could not be added to concatenated file."
             end try
         end if
         -- Add tags
         if not errorHappened then
             try
+                progressField's setStringValue_("Adding tags...")
                 do shell script (cmdPrefix & "mp4tags -song \"" & pcatName & "\" -album \"" &  pcatAlbum & "\" -artist \"" &  pcatArtist & "\" -writer \"" &  pcatComposer & "\" -genre \"" &  pcatGenre & "\" -track \"" &  pcatTrack & "\" -tracks \"" &  pcatTracks & "\" -disk \"" &  pcatDisc & "\" -disks \"" &  pcatDiscs & "\" -albumartist \"" & pcatAlbumArtist & "\" -year \"" & pcatYear & "\" /private/tmp/cat.mp4" as text)
             on error error_number
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
+                progressField's setStringValue_("")
                 display dialog "The tags could not be added to the concatenated audio file."
             end try
         end if
         -- Add the finished track to iTunes
         if not errorHappened then
+            progressField's setStringValue_("Adding to iTunes...")
             try
                 if mediaTypeText is "Music track" then
                     set mediaType to "m4a"
@@ -265,12 +278,14 @@ script DASAppDelegate
             on error error_number
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt /private/tmp/cat." & mediaType
+                progressField's setStringValue_("")
                 display dialog "The concatenated file could not be added to iTunes."
             end try
         end if
         -- Clean up
         do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4*"
         set theCounter to ""
+        progressField's setStringValue_("")
     end btnConcatenate_
 
 

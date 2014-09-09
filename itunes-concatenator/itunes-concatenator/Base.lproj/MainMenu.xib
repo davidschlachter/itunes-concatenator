@@ -24,6 +24,7 @@
                 <outlet property="catTrack" destination="aSi-4N-lna" id="5f0-ZW-Ohz"/>
                 <outlet property="catTracks" destination="gis-qb-TSE" id="L19-UQ-M8d"/>
                 <outlet property="catYear" destination="hVz-yN-KRE" id="pmF-rj-WB8"/>
+                <outlet property="progressField" destination="tNK-0P-qES" id="Llj-HG-Pmn"/>
                 <outlet property="radioType" destination="Hgj-7n-MZB" id="Roa-e4-4X8"/>
                 <outlet property="trackTable" destination="Unh-uq-Lfy" id="kY2-AZ-pNp"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
@@ -683,8 +684,8 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="218" width="553" height="592"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
-            <view key="contentView" id="EiT-Mj-1SZ">
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="900"/>
+            <view key="contentView" canDrawConcurrently="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="553" height="592"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
@@ -968,7 +969,7 @@
                         </connections>
                     </textField>
                     <box autoresizesSubviews="NO" verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="dR3-0v-Z56">
-                        <rect key="frame" x="0.0" y="99" width="553" height="5"/>
+                        <rect key="frame" x="0.0" y="99" width="553" height="4"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1022,23 +1023,32 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hgj-7n-MZB">
-                        <rect key="frame" x="18" y="36" width="152" height="26"/>
+                        <rect key="frame" x="18" y="36" width="106" height="26"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" title="Music track" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="oSx-D4-DYg" id="Qf3-Ub-Qzw">
+                        <popUpButtonCell key="cell" type="push" title="Music track" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="oSx-D4-DYg" id="Qf3-Ub-Qzw">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="L4Q-ld-uaK">
                                 <items>
-                                    <menuItem title="Music track" id="oSx-D4-DYg">
+                                    <menuItem title="Music track" state="on" id="oSx-D4-DYg">
                                         <modifierMask key="keyEquivalentModifierMask"/>
                                     </menuItem>
-                                    <menuItem title="Audiobook track" id="V7e-u2-mT9">
+                                    <menuItem title="Audiobook" id="V7e-u2-mT9">
                                         <modifierMask key="keyEquivalentModifierMask"/>
                                     </menuItem>
                                 </items>
                             </menu>
                         </popUpButtonCell>
                     </popUpButton>
+                    <textField canDrawConcurrently="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tNK-0P-qES">
+                        <rect key="frame" x="141" y="41" width="240" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" continuous="YES" sendsActionOnEndEditing="YES" id="bpk-0m-2S9">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstItem="92W-ZU-oaO" firstAttribute="trailing" secondItem="KV2-LC-d0X" secondAttribute="trailing" id="4ly-wd-vLb"/>
