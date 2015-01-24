@@ -18,16 +18,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6343467019ACE1AA008396D2 /* itunes-concatenator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "itunes-concatenator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6343467019ACE1AA008396D2 /* Track Concatenator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Track Concatenator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6343467319ACE1AA008396D2 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		6343467519ACE1AA008396D2 /* AppleScriptObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppleScriptObjC.framework; path = System/Library/Frameworks/AppleScriptObjC.framework; sourceTree = SDKROOT; };
 		6343467819ACE1AA008396D2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		6343467919ACE1AA008396D2 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		6343467A19ACE1AA008396D2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		6343467D19ACE1AA008396D2 /* itunes-concatenator-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "itunes-concatenator-Info.plist"; sourceTree = "<group>"; };
+		6343467D19ACE1AA008396D2 /* Track Concatenator-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Track Concatenator-Info.plist"; sourceTree = "<group>"; };
 		6343467F19ACE1AA008396D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6343468119ACE1AA008396D2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		6343468319ACE1AA008396D2 /* itunes-concatenator-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "itunes-concatenator-Prefix.pch"; sourceTree = "<group>"; };
+		6343468319ACE1AA008396D2 /* Track Concatenator-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Track Concatenator-Prefix.pch"; sourceTree = "<group>"; };
 		6343468519ACE1AA008396D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		6343468719ACE1AA008396D2 /* DASAppDelegate.applescript */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.applescript; path = DASAppDelegate.applescript; sourceTree = "<group>"; };
 		6343468A19ACE1AA008396D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -59,7 +59,7 @@
 		6343467119ACE1AA008396D2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6343467019ACE1AA008396D2 /* itunes-concatenator.app */,
+				6343467019ACE1AA008396D2 /* Track Concatenator.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -98,10 +98,10 @@
 		6343467C19ACE1AA008396D2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				6343467D19ACE1AA008396D2 /* itunes-concatenator-Info.plist */,
+				6343467D19ACE1AA008396D2 /* Track Concatenator-Info.plist */,
 				6343467E19ACE1AA008396D2 /* InfoPlist.strings */,
 				6343468119ACE1AA008396D2 /* main.m */,
-				6343468319ACE1AA008396D2 /* itunes-concatenator-Prefix.pch */,
+				6343468319ACE1AA008396D2 /* Track Concatenator-Prefix.pch */,
 				6343468419ACE1AA008396D2 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
@@ -110,9 +110,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6343466F19ACE1AA008396D2 /* itunes-concatenator */ = {
+		6343466F19ACE1AA008396D2 /* Track Concatenator */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6343469019ACE1AA008396D2 /* Build configuration list for PBXNativeTarget "itunes-concatenator" */;
+			buildConfigurationList = 6343469019ACE1AA008396D2 /* Build configuration list for PBXNativeTarget "Track Concatenator" */;
 			buildPhases = (
 				6343466C19ACE1AA008396D2 /* Sources */,
 				6343466D19ACE1AA008396D2 /* Frameworks */,
@@ -122,9 +122,9 @@
 			);
 			dependencies = (
 			);
-			name = "itunes-concatenator";
+			name = "Track Concatenator";
 			productName = "itunes-concatenator";
-			productReference = 6343467019ACE1AA008396D2 /* itunes-concatenator.app */;
+			productReference = 6343467019ACE1AA008396D2 /* Track Concatenator.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -135,9 +135,9 @@
 			attributes = {
 				CLASSPREFIX = DAS;
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = "Red Eft Software";
+				ORGANIZATIONNAME = "David Schlachter";
 			};
-			buildConfigurationList = 6343466B19ACE1AA008396D2 /* Build configuration list for PBXProject "itunes-concatenator" */;
+			buildConfigurationList = 6343466B19ACE1AA008396D2 /* Build configuration list for PBXProject "Track Concatenator" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -150,7 +150,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6343466F19ACE1AA008396D2 /* itunes-concatenator */,
+				6343466F19ACE1AA008396D2 /* Track Concatenator */,
 			);
 		};
 /* End PBXProject section */
@@ -285,9 +285,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "itunes-concatenator/itunes-concatenator-Prefix.pch";
-				INFOPLIST_FILE = "itunes-concatenator/itunes-concatenator-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "itunes-concatenator/Track Concatenator-Prefix.pch";
+				INFOPLIST_FILE = "itunes-concatenator/Track Concatenator-Info.plist";
+				PRODUCT_NAME = "Track Concatenator";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -298,9 +298,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "itunes-concatenator/itunes-concatenator-Prefix.pch";
-				INFOPLIST_FILE = "itunes-concatenator/itunes-concatenator-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "itunes-concatenator/Track Concatenator-Prefix.pch";
+				INFOPLIST_FILE = "itunes-concatenator/Track Concatenator-Info.plist";
+				PRODUCT_NAME = "Track Concatenator";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -308,7 +308,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6343466B19ACE1AA008396D2 /* Build configuration list for PBXProject "itunes-concatenator" */ = {
+		6343466B19ACE1AA008396D2 /* Build configuration list for PBXProject "Track Concatenator" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6343468E19ACE1AA008396D2 /* Debug */,
@@ -317,7 +317,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6343469019ACE1AA008396D2 /* Build configuration list for PBXNativeTarget "itunes-concatenator" */ = {
+		6343469019ACE1AA008396D2 /* Build configuration list for PBXNativeTarget "Track Concatenator" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6343469119ACE1AA008396D2 /* Debug */,

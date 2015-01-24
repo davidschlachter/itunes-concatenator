@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:itunes-concatenator.xcodeproj">
+      location = "self:Track Concatenator.xcodeproj">
    </FileRef>
 </Workspace>
