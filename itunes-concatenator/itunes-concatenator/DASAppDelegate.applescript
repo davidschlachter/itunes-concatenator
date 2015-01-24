@@ -45,6 +45,19 @@ script DASAppDelegate
     property missingPackages : ""
     property mediaTypeText : ""
     
+    -- This set is for the tags
+    property fcatName : ""
+    property fcatArtist : ""
+    property fcatAlbum : ""
+    property fcatComposer : ""
+    property fcatGenre : ""
+    property fcatTrack : ""
+    property fcatTracks : ""
+    property fcatDisc : ""
+    property fcatDiscs : ""
+    property fcatAlbumArtist : ""
+    property fcatYear : ""
+    
     -- Empty strings for each file name and location
     property pEachName : ""
     property pEachLocation : ""
@@ -166,7 +179,7 @@ script DASAppDelegate
 
     on btnConcatenate_(sender)
         -- Update the metadata variables with the user's input
-        set pcatName to catName's stringValue()
+        if catName's stringValue() is not "" then set pcatName to catName's stringValue()
         set pcatArtist to catArtist's stringValue()
         set pcatAlbum to catAlbum's stringValue()
         set pcatComposer to catComposer's stringValue()
@@ -254,12 +267,35 @@ script DASAppDelegate
                 display dialog "The chapters could not be added to concatenated file."
             end try
         end if
+        -- Prepare tags
+        if pcatName is not "" then set fcatName to (" -song \"" & pcatName & "\" ")
+        if fcatName contains "\"\"" then set fcatName to ""
+        if pcatAlbum is not "" then set fcatAlbum to (" -album \"" & pcatAlbum & "\" ")
+        if fcatAlbum contains "\"\"" then set fcatAlbum to ""
+        if pcatArtist is not "" then set fcatArtist to (" -artist \"" & pcatArtist & "\" ")
+        if fcatArtist contains "\"\"" then set fcatArtist to ""
+        if pcatComposer is not "" then set fcatComposer to (" -writer \"" & pcatComposer & "\" ")
+        if fcatComposer contains "\"\"" then set fcatComposer to ""
+        if pcatGenre is not "" then set fcatGenre to (" -genre \"" & pcatGenre & "\" ")
+        if fcatGenre contains "\"\"" then set fcatGenre to ""
+        if pcatTrack is not "" then set fcatTrack to (" -track \"" & pcatTrack & "\" ")
+        if fcatTrack contains "\"\"" then set fcatTrack to ""
+        if pcatTracks is not "" then set fcatTracks to (" -tracks \"" & pcatTracks & "\" ")
+        if fcatTracks contains "\"\"" then set fcatTracks to ""
+        if pcatDisc is not "" then set fcatDisc to (" -disk \"" & pcatDisc & "\" ")
+        if fcatDisc contains "\"\"" then set fcatDisc to ""
+        if pcatDiscs is not "" then set fcatDiscs to (" -disks \"" & pcatDiscs & "\" ")
+        if fcatDiscs contains "\"\"" then set fcatDiscs to ""
+        if pcatAlbumArtist is not "" then set fcatAlbumArtist to (" -albumartist \"" & pcatAlbumArtist & "\" ")
+        if fcatAlbumArtist contains "\"\"" then set fcatAlbumArtist to ""
+        if pcatYear is not "" then set fcatYear to (" -year \"" & pcatYear & "\" ")
+        if fcatYear contains "\"\"" then set fcatYear to ""
         -- Add tags
         if not errorHappened then
             try
                 progressField's setStringValue_("Adding tags...")
                 delay 0.2
-                do shell script (cmdPrefix & "mp4tags -song \"" & pcatName & "\" -album \"" &  pcatAlbum & "\" -artist \"" &  pcatArtist & "\" -writer \"" &  pcatComposer & "\" -genre \"" &  pcatGenre & "\" -track \"" &  pcatTrack & "\" -tracks \"" &  pcatTracks & "\" -disk \"" &  pcatDisc & "\" -disks \"" &  pcatDiscs & "\" -albumartist \"" & pcatAlbumArtist & "\" -year \"" & pcatYear & "\" /private/tmp/cat.mp4" as text)
+                do shell script (cmdPrefix & "mp4tags " & fcatName & fcatAlbum & fcatArtist & fcatComposer & fcatGenre & fcatTrack & fcatTracks & fcatDisc & fcatDiscs & fcatAlbumArtist & fcatYear & " /private/tmp/cat.mp4" as text)
             on error error_number
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
