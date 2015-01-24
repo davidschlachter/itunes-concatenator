@@ -15,6 +15,7 @@
 		6343468819ACE1AA008396D2 /* DASAppDelegate.applescript in Sources */ = {isa = PBXBuildFile; fileRef = 6343468719ACE1AA008396D2 /* DASAppDelegate.applescript */; };
 		6343468B19ACE1AA008396D2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6343468919ACE1AA008396D2 /* MainMenu.xib */; };
 		6343468D19ACE1AA008396D2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6343468C19ACE1AA008396D2 /* Images.xcassets */; };
+		63CC7B8B1A741968008396D2 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 63CC7B8A1A741968008396D2 /* Icon.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		6343468719ACE1AA008396D2 /* DASAppDelegate.applescript */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.applescript; path = DASAppDelegate.applescript; sourceTree = "<group>"; };
 		6343468A19ACE1AA008396D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6343468C19ACE1AA008396D2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		63CC7B8A1A741968008396D2 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				6343468719ACE1AA008396D2 /* DASAppDelegate.applescript */,
+				63CC7B8A1A741968008396D2 /* Icon.icns */,
 				6343468919ACE1AA008396D2 /* MainMenu.xib */,
 				6343468C19ACE1AA008396D2 /* Images.xcassets */,
 				6343467C19ACE1AA008396D2 /* Supporting Files */,
@@ -162,6 +165,7 @@
 			files = (
 				6343468019ACE1AA008396D2 /* InfoPlist.strings in Resources */,
 				6343468D19ACE1AA008396D2 /* Images.xcassets in Resources */,
+				63CC7B8B1A741968008396D2 /* Icon.icns in Resources */,
 				6343468619ACE1AA008396D2 /* Credits.rtf in Resources */,
 				6343468B19ACE1AA008396D2 /* MainMenu.xib in Resources */,
 			);
