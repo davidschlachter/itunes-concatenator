@@ -94,7 +94,7 @@ script DASAppDelegate
             display dialog "You must install the following programs to continue: \n\t" & missingPackages & " \n\nYou may have to install Xcode Command Line Tools and Homebrew first. If you continue, we'll attempt to install them for you if they are not already present. \n\nIf you have already installed FFMPEG and MP4v2, ensure that they are in your bash path." buttons {"Quit","Install"} default button 2
             if result = {button returned:"Install"} then
                 tell application "Terminal"
-                    set newTab to do script cmdPrefix & "if [[ -x `which brew` ]];then brew install ffmpeg mp4v2 && exit 0;else /usr/bin/ruby -e \"$(/usr/bin/curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)\"; brew install ffmpeg mp4v2 && exit 0;fi"
+                    set newTab to do script cmdPrefix & "if [[ -x `which brew` ]];then brew install ffmpeg mp4v2 && exit 0;else /usr/bin/ruby -e \"$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\"; brew install ffmpeg mp4v2 && exit 0;fi"
                     delay 1
                     activate
                     -- Check for when the Terminal is done
