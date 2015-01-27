@@ -46,6 +46,9 @@
                             </menuItem>
                             <menuItem title="Check for Updates…" id="rW8-T3-YFh">
                                 <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="checkForUpdates:" target="pI8-dv-cLM" id="dI4-v1-3Za"/>
+                                </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
                             <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW"/>

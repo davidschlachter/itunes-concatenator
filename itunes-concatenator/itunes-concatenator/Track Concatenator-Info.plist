@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>Icon</string>
 	<key>CFBundleIdentifier</key>
-	<string>redeft.$(PRODUCT_NAME:rfc1034identifier)</string>
+	<string>com.davidschlachter.$(PRODUCT_NAME:rfc1034identifier)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
