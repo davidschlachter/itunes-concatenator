@@ -44,9 +44,6 @@
                                     <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Check for Updates…" id="rW8-T3-YFh">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
                             <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW"/>
                             <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
@@ -684,6 +681,7 @@
                 </menuItem>
             </items>
         </menu>
+        <customObject id="dod-na-Jkr" customClass="SUUpdater"/>
         <window title="Track Concatenator" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" topStrut="YES" bottomStrut="YES"/>
@@ -1028,7 +1026,6 @@
                 </constraints>
             </view>
         </window>
-        <customObject id="pI8-dv-cLM" customClass="SUUpdater"/>
         <userDefaultsController representsSharedInstance="YES" id="4FD-H9-7GO"/>
     </objects>
 </document>

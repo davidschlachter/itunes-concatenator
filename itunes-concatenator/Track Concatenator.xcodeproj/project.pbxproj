@@ -16,10 +16,10 @@
 		6343468219ACE1AA008396D2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6343468119ACE1AA008396D2 /* main.m */; };
 		6343468619ACE1AA008396D2 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6343468419ACE1AA008396D2 /* Credits.rtf */; };
 		6343468819ACE1AA008396D2 /* DASAppDelegate.applescript in Sources */ = {isa = PBXBuildFile; fileRef = 6343468719ACE1AA008396D2 /* DASAppDelegate.applescript */; };
-		6343468B19ACE1AA008396D2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6343468919ACE1AA008396D2 /* MainMenu.xib */; };
 		6343468D19ACE1AA008396D2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6343468C19ACE1AA008396D2 /* Images.xcassets */; };
 		63CC7B8B1A741968008396D2 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 63CC7B8A1A741968008396D2 /* Icon.icns */; };
 		63CC7B8D1A7419F5008396D2 /* Icon.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63CC7B8C1A7419F5008396D2 /* Icon.svg */; };
+		63E5FA731A785D29008396D2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6343468919ACE1AA008396D2 /* MainMenu.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -188,12 +188,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63E5FA731A785D29008396D2 /* MainMenu.xib in Resources */,
 				631DEB0F1A77B49F008396D2 /* dsa_pub.pem in Resources */,
 				6343468019ACE1AA008396D2 /* InfoPlist.strings in Resources */,
 				6343468D19ACE1AA008396D2 /* Images.xcassets in Resources */,
 				63CC7B8B1A741968008396D2 /* Icon.icns in Resources */,
 				6343468619ACE1AA008396D2 /* Credits.rtf in Resources */,
-				6343468B19ACE1AA008396D2 /* MainMenu.xib in Resources */,
 				63CC7B8D1A7419F5008396D2 /* Icon.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -274,6 +274,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -306,6 +307,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
 				SDKROOT = macosx;
 			};
 			name = Release;
