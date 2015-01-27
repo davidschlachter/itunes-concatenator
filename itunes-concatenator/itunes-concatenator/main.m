@@ -10,6 +10,8 @@
 
 #import <AppleScriptObjC/AppleScriptObjC.h>
 
+#import <Sparkle/Sparkle.h>
+
 int main(int argc, const char * argv[])
 {
     [[NSBundle mainBundle] loadAppleScriptObjectiveCScripts];
