@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1</string>
+	<string>1.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -32,6 +32,8 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>SUEnableSystemProfiling</key>
+	<true/>
 	<key>SUFeedURL</key>
 	<string>https://www.davidschlachter.com/misc/tcappcast.xml</string>
 	<key>SUPublicDSAKeyFile</key>
