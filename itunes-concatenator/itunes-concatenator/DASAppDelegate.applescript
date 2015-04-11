@@ -68,6 +68,8 @@ script DASAppDelegate
     property the_index: {}
     property the_pipes: {}
     
+    property quitme : 0
+    
     property theCounter : ""
     property cmdPrefix : "if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi;"
     
@@ -117,7 +119,8 @@ script DASAppDelegate
                     display dialog "Homebrew, FFMPEG and/or MP4v2 could not be installed."
                 end try
                 else if result = {button returned:"Quit"} then
-                tell me to quit
+                    set quitme to 1
+                    return current application's NSTerminateNow
             end if
         end if
     end awakeFromNib
@@ -334,6 +337,9 @@ script DASAppDelegate
 
 	on applicationWillFinishLaunching_(aNotification)
         -- Insert code here to initialize your application before any files are opened
+        if quitme is 1 then
+            tell me to quit
+        end if
 	end applicationWillFinishLaunching_
 
 	on applicationShouldTerminate_(sender)
