@@ -273,15 +273,15 @@ script DASAppDelegate
             end try
         end if
         -- Prepare tags
-        if pcatName is not "" then set fcatName to (" -song \"" & pcatName & "\" ")
+        if pcatName is not "" then set fcatName to (" -song " & quoted form of (pcatName as text) & " ")
         if fcatName contains "\"\"" then set fcatName to ""
-        if pcatAlbum is not "" then set fcatAlbum to (" -album \"" & pcatAlbum & "\" ")
+        if pcatAlbum is not "" then set fcatAlbum to (" -album " & quoted form of (pcatAlbum as text) & " ")
         if fcatAlbum contains "\"\"" then set fcatAlbum to ""
-        if pcatArtist is not "" then set fcatArtist to (" -artist \"" & pcatArtist & "\" ")
+        if pcatArtist is not "" then set fcatArtist to (" -artist " & quoted form of (pcatArtist as text) & " ")
         if fcatArtist contains "\"\"" then set fcatArtist to ""
-        if pcatComposer is not "" then set fcatComposer to (" -writer \"" & pcatComposer & "\" ")
+        if pcatComposer is not "" then set fcatComposer to (" -writer " & quoted form of (pcatComposer as text) & " ")
         if fcatComposer contains "\"\"" then set fcatComposer to ""
-        if pcatGenre is not "" then set fcatGenre to (" -genre \"" & pcatGenre & "\" ")
+        if pcatGenre is not "" then set fcatGenre to (" -genre " & quoted form of (pcatGenre as text) & " ")
         if fcatGenre contains "\"\"" then set fcatGenre to ""
         if pcatTrack is not "" then set fcatTrack to (" -track \"" & pcatTrack & "\" ")
         if fcatTrack contains "\"\"" then set fcatTrack to ""
@@ -291,7 +291,7 @@ script DASAppDelegate
         if fcatDisc contains "\"\"" then set fcatDisc to ""
         if pcatDiscs is not "" then set fcatDiscs to (" -disks \"" & pcatDiscs & "\" ")
         if fcatDiscs contains "\"\"" then set fcatDiscs to ""
-        if pcatAlbumArtist is not "" then set fcatAlbumArtist to (" -albumartist \"" & pcatAlbumArtist & "\" ")
+        if pcatAlbumArtist is not "" then set fcatAlbumArtist to (" -albumartist " & quoted form of (pcatAlbumArtist as text) & " ")
         if fcatAlbumArtist contains "\"\"" then set fcatAlbumArtist to ""
         if pcatYear is not "" then set fcatYear to (" -year \"" & pcatYear & "\" ")
         if fcatYear contains "\"\"" then set fcatYear to ""
