@@ -77,14 +77,15 @@ script DASAppDelegate
             do shell script cmdPrefix & " if [ -x \"`/usr/bin/which ffmpeg`\" ];then exit 0;else exit 1;fi"
             on error number error_number
             set missingPackages to "FFMPEG "
+            set ffmpegmissing to 1
         end try
         
         -- Check for MP4v2 in the path
         try
             do shell script cmdPrefix & " if [ -x \"`/usr/bin/which mp4chaps`\" ];then exit 0;else exit 1;fi"
             on error number error_number
-            if missingPackages is "FFMPEG" then
-                set the end of missingPackages to "FFMPEG "
+            if ffmpegmissing is 1 then
+                set missingPackages to "FFMPEG MP4v2"
             else
                 set missingPackages to "MP4v2 "
             end if
