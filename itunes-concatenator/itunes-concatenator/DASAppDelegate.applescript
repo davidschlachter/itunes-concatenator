@@ -205,10 +205,21 @@ script DASAppDelegate
         -- Create the intermediate files
         try
             repeat with theIndex in the_index
-                progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
-                delay 0.2
-                do shell script (cmdPrefix & "ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -f mpegts -loglevel fatal -vn /private/tmp/concat" & theIndex & ".ts" as text)
-                set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
+                if not errorHappened then
+                    progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
+                    delay 0.2
+                    -- Check that the audio files are aac / mp4a
+                    try
+                        do shell script (cmdPrefix & "if [ `ffprobe -show_streams -select_streams a \"" & (item theIndex of these_files as text) & "\"  2>/dev/null | grep -c \"mp4a\\|aac\"` -gt 0 ]; then exit 0; else exit 1; fi")
+                    on error number error_number
+                        set errorHappened to true
+                        display dialog "The track " & (item theIndex of these_files as text) & " is not an AAC/MP4 file and cannot not joined."
+                    end try
+                    if not errorHappened then
+                        do shell script (cmdPrefix & "ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -f mpegts -loglevel fatal -vn /private/tmp/concat" & theIndex & ".ts" as text)
+                    end if
+                    set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
+                end if
             end repeat
         on error error_number
             set errorHappened to true
