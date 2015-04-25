@@ -205,6 +205,8 @@ script DASAppDelegate
         set errorHappened to false
         set notaac to false
          -- Check if the audio files are all aac / mp4a
+        progressField's setStringValue_("Determining filetypes...")
+         delay 0.2
         repeat with theIndex in the_index
             try
                 do shell script (cmdPrefix & "if [ `ffprobe -show_streams -select_streams a " & (quoted form of POSIX path of (item theIndex of these_files as text)) & "  2>/dev/null | grep -c \"mp4a\\|aac\"` -gt 0 ]; then exit 0; else exit 1; fi")
