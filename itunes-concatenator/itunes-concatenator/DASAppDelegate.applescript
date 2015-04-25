@@ -207,7 +207,7 @@ script DASAppDelegate
          -- Check if the audio files are all aac / mp4a
         repeat with theIndex in the_index
             try
-                do shell script (cmdPrefix & "if [ `ffprobe -show_streams -select_streams a \"" & (item theIndex of these_files as text) & "\"  2>/dev/null | grep -c \"mp4a\\|aac\"` -gt 0 ]; then exit 0; else exit 1; fi")
+                do shell script (cmdPrefix & "if [ `ffprobe -show_streams -select_streams a " & (quoted form of POSIX path of (item theIndex of these_files as text)) & "  2>/dev/null | grep -c \"mp4a\\|aac\"` -gt 0 ]; then exit 0; else exit 1; fi")
             on error number error_number
                 set notaac to true
             end try
@@ -219,7 +219,7 @@ script DASAppDelegate
                 repeat with theIndex in the_index
                     progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
                     delay 0.2
-                    do shell script (cmdPrefix & "ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -f mpegts -loglevel fatal -vn /private/tmp/concat" & theIndex & ".ts" as text)
+                    do shell script (cmdPrefix & "ffmpeg -i " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " -c copy -f mpegts -loglevel fatal -vn /private/tmp/concat" & theIndex & ".ts" as text)
                     set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
                 end repeat
             on error error_number
@@ -249,10 +249,8 @@ script DASAppDelegate
                     progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
                     delay 0.2
                     -- No spaces allowed in paths for the script...
-                    -- set end of the_pipes to (quoted form of POSIX path of (item theIndex of these_files as text))
-                    do shell script (cmdPrefix & "cp " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " /private/tmp/concat" & theIndex & ".ts" as text)
+                    do shell script ("/bin/cp " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " /private/tmp/concat" & theIndex & ".ts" as text)
                     set end of the_pipes to ("concat" & theIndex & ".ts" as text)
-                    
                 end repeat
             on error error_number
                 set errorHappened to true
@@ -265,12 +263,15 @@ script DASAppDelegate
             set disp_thepipes to the_pipes as string
             progressField's setStringValue_("Concatenating tracks...")
             delay 0.2
-            
-            set scriptpath to (quoted form of POSIX path of (current application's NSBundle's mainBundle()'s bundlePath() as text & "/Contents/Resources/mmcat.sh")) & " "
-            -- set objectFolder to (path to me) as string
-            display dialog (scriptpath & (disp_thepipes as text) & " cat.mp4" as text)
-            do shell script ("cd /private/tmp && " & scriptpath & (disp_thepipes as text) & " cat.mp4" as text)
-            
+            try
+                set scriptpath to (quoted form of POSIX path of (current application's NSBundle's mainBundle()'s bundlePath() as text & "/Contents/Resources/mmcat.sh")) & " "
+                do shell script ("cd /private/tmp && " & scriptpath & (disp_thepipes as text) & " cat.mp4" as text)
+            on error error_number
+                set errorHappened to true
+                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4"
+                progressField's setStringValue_("")
+                display dialog "The tracks could not be joined. An error occured during the reencoding."
+            end try
             set AppleScript's text item delimiters to olddelimeters
         end if
         -- Now let's create the chapter file
