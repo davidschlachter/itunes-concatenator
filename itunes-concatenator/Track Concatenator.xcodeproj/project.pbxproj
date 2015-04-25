@@ -20,6 +20,7 @@
 		63CC7B8B1A741968008396D2 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 63CC7B8A1A741968008396D2 /* Icon.icns */; };
 		63CC7B8D1A7419F5008396D2 /* Icon.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63CC7B8C1A7419F5008396D2 /* Icon.svg */; };
 		63E5FA731A785D29008396D2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6343468919ACE1AA008396D2 /* MainMenu.xib */; };
+		63FF09B01AEBE6240011DB73 /* mmcat.sh in Resources */ = {isa = PBXBuildFile; fileRef = 63FF09AF1AEBE6240011DB73 /* mmcat.sh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,6 +55,7 @@
 		6343468C19ACE1AA008396D2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		63CC7B8A1A741968008396D2 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
 		63CC7B8C1A7419F5008396D2 /* Icon.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Icon.svg; sourceTree = "<group>"; };
+		63FF09AF1AEBE6240011DB73 /* mmcat.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = mmcat.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				6343467D19ACE1AA008396D2 /* Track Concatenator-Info.plist */,
 				6343467E19ACE1AA008396D2 /* InfoPlist.strings */,
 				6343468119ACE1AA008396D2 /* main.m */,
+				63FF09AF1AEBE6240011DB73 /* mmcat.sh */,
 				6343468319ACE1AA008396D2 /* Track Concatenator-Prefix.pch */,
 				6343468419ACE1AA008396D2 /* Credits.rtf */,
 			);
@@ -191,6 +194,7 @@
 				63E5FA731A785D29008396D2 /* MainMenu.xib in Resources */,
 				631DEB0F1A77B49F008396D2 /* dsa_pub.pem in Resources */,
 				6343468019ACE1AA008396D2 /* InfoPlist.strings in Resources */,
+				63FF09B01AEBE6240011DB73 /* mmcat.sh in Resources */,
 				6343468D19ACE1AA008396D2 /* Images.xcassets in Resources */,
 				63CC7B8B1A741968008396D2 /* Icon.icns in Resources */,
 				6343468619ACE1AA008396D2 /* Credits.rtf in Resources */,

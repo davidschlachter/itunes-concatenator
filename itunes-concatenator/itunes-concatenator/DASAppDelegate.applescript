@@ -201,35 +201,33 @@ script DASAppDelegate
         try
             do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4* /private/tmp/cat.mp4"
         end try
+        -- Initialize the error variables
         set errorHappened to false
-        -- Create the intermediate files
-        try
-            repeat with theIndex in the_index
-                if not errorHappened then
+        set notaac to false
+         -- Check if the audio files are all aac / mp4a
+        repeat with theIndex in the_index
+            try
+                do shell script (cmdPrefix & "if [ `ffprobe -show_streams -select_streams a \"" & (item theIndex of these_files as text) & "\"  2>/dev/null | grep -c \"mp4a\\|aac\"` -gt 0 ]; then exit 0; else exit 1; fi")
+            on error number error_number
+                set notaac to true
+            end try
+        end repeat
+        -- Create the concatenated intermediate file
+        if not notaac then
+            -- Concatenation routine for mp4/aac files
+            try
+                repeat with theIndex in the_index
                     progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
                     delay 0.2
-                    -- Check that the audio files are aac / mp4a
-                    try
-                        do shell script (cmdPrefix & "if [ `ffprobe -show_streams -select_streams a \"" & (item theIndex of these_files as text) & "\"  2>/dev/null | grep -c \"mp4a\\|aac\"` -gt 0 ]; then exit 0; else exit 1; fi")
-                    on error number error_number
-                        set errorHappened to true
-                        display dialog "The track " & (item theIndex of these_files as text) & " is not an AAC/MP4 file and cannot not joined."
-                    end try
-                    if not errorHappened then
-                        do shell script (cmdPrefix & "ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -f mpegts -loglevel fatal -vn /private/tmp/concat" & theIndex & ".ts" as text)
-                    end if
+                    do shell script (cmdPrefix & "ffmpeg -i \"" & (item theIndex of these_files as text) & "\" -c copy -f mpegts -loglevel fatal -vn /private/tmp/concat" & theIndex & ".ts" as text)
                     set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
-                end if
-            end repeat
-        on error error_number
-            set errorHappened to true
-            do shell script "/bin/rm -f /private/tmp/concat*"
-            progressField's setStringValue_("")
-            display dialog "The tracks you selected could not be joined. Only mp4 files encoded as AAC can be joined presently."
-        end try
-        -- Run the actual concatenation command in ffmpeg (for mp4/AAC files only!)
-        -- via https://trac.ffmpeg.org/wiki/How%20to%20concatenate%20(join,%20merge)%20media%20files
-        if not errorHappened then
+                end repeat
+            on error error_number
+                set errorHappened to true
+                do shell script "/bin/rm -f /private/tmp/concat*"
+                progressField's setStringValue_("")
+                display dialog "The tracks you selected could not be joined. An error occured when preparing the intermediate files."
+            end try
             try
                 set olddelimeters to AppleScript's text item delimiters
                 set AppleScript's text item delimiters to "|"
@@ -244,6 +242,36 @@ script DASAppDelegate
                 progressField's setStringValue_("")
                 display dialog "The tracks could not be joined."
             end try
+            else
+            -- Concatenation routine for non-mp4/aac audio files
+            try
+                repeat with theIndex in the_index
+                    progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
+                    delay 0.2
+                    -- No spaces allowed in paths for the script...
+                    -- set end of the_pipes to (quoted form of POSIX path of (item theIndex of these_files as text))
+                    do shell script (cmdPrefix & "cp " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " /private/tmp/concat" & theIndex & ".ts" as text)
+                    set end of the_pipes to ("concat" & theIndex & ".ts" as text)
+                    
+                end repeat
+            on error error_number
+                set errorHappened to true
+                do shell script "/bin/rm -f /private/tmp/concat*"
+                progressField's setStringValue_("")
+                display dialog "The tracks you selected could not be joined."
+            end try
+            set olddelimeters to AppleScript's text item delimiters
+            set AppleScript's text item delimiters to " "
+            set disp_thepipes to the_pipes as string
+            progressField's setStringValue_("Concatenating tracks...")
+            delay 0.2
+            
+            set scriptpath to (quoted form of POSIX path of (current application's NSBundle's mainBundle()'s bundlePath() as text & "/Contents/Resources/mmcat.sh")) & " "
+            -- set objectFolder to (path to me) as string
+            display dialog (scriptpath & (disp_thepipes as text) & " cat.mp4" as text)
+            do shell script ("cd /private/tmp && " & scriptpath & (disp_thepipes as text) & " cat.mp4" as text)
+            
+            set AppleScript's text item delimiters to olddelimeters
         end if
         -- Now let's create the chapter file
         if not errorHappened then
