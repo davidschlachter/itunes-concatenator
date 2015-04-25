@@ -201,19 +201,27 @@ script DASAppDelegate
         try
             do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4* /private/tmp/cat.mp4"
         end try
-        -- Initialize the error variables
+        -- Initialize some variables
         set errorHappened to false
         set notaac to false
+        set bitrate to 0
          -- Check if the audio files are all aac / mp4a
         progressField's setStringValue_("Determining filetypes...")
          delay 0.2
         repeat with theIndex in the_index
+            set thefile to (quoted form of POSIX path of (item theIndex of these_files as text))
             try
-                do shell script (cmdPrefix & "if [ `ffprobe -show_streams -select_streams a " & (quoted form of POSIX path of (item theIndex of these_files as text)) & "  2>/dev/null | grep -c \"mp4a\\|aac\"` -gt 0 ]; then exit 0; else exit 1; fi")
+                do shell script (cmdPrefix & "if [ `ffprobe -show_streams -select_streams a " & thefile & "  2>/dev/null | grep -c \"mp4a\\|aac\"` -gt 0 ]; then exit 0; else exit 1; fi")
             on error number error_number
                 set notaac to true
             end try
+            try
+                set newbitrate to (do shell script (cmdPrefix & "ffprobe -show_streams -select_streams a " & thefile & " 2>/dev/null | grep '^bit_rate=' | sed 's/bit_rate=\\([0-9][0-9]*\\)/\\1/' | sed 's/\\(.*\\).\\{3\\}/\\1/'") as text)
+                if (newbitrate as number) is greater than (bitrate as number) then set bitrate to (newbitrate as number)
+            end try
         end repeat
+        set bitrate to bitrate as number
+        if bitrate = 0 then set bitrate to 256
         -- Create the concatenated intermediate file
         if not notaac then
             -- Concatenation routine for mp4/aac files
@@ -267,7 +275,7 @@ script DASAppDelegate
             delay 0.2
             try
                 set scriptpath to (quoted form of POSIX path of (current application's NSBundle's mainBundle()'s bundlePath() as text & "/Contents/Resources/mmcat.sh")) & " "
-                do shell script ("cd /private/tmp && " & scriptpath & (disp_thepipes as text) & " cat.mp4" as text)
+                do shell script ("cd /private/tmp && " & scriptpath & (bitrate as text) & " " & (disp_thepipes as text) & " cat.mp4" as text)
             on error error_number
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4"
