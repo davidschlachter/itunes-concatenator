@@ -4,4 +4,4 @@ Download the latest version: [Track Concatenator](https://www.davidschlachter.co
 
 More information at [Track Concatenator homepage](https://www.davidschlachter.com/misc/trackconcat).
 
-Now working, but there are some issues (see [Issues](https://github.com/davidschlachter/itunes-concatenator/issues)). FFMPEG and MP4v2 must be installed in order to concatenate. Only concatenates MP4/AAC files, but does so losslessly.
+FFMPEG and MP4v2 must be installed in order to concatenate. Concatenates MP4/AAC files losslessly, other formats are reencoded at the highest input bitrate as MP4/AAC.
