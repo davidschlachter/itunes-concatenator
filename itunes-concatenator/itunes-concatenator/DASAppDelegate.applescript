@@ -210,11 +210,13 @@ script DASAppDelegate
          delay 0.2
         repeat with theIndex in the_index
             set thefile to (quoted form of POSIX path of (item theIndex of these_files as text))
-            try
-                do shell script (cmdPrefix & "if [ `ffprobe -show_streams -select_streams a " & thefile & "  2>/dev/null | grep -c \"mp4a\\|aac\"` -gt 0 ]; then exit 0; else exit 1; fi")
-            on error number error_number
-                set notaac to true
-            end try
+            if not notaac
+                try
+                    do shell script (cmdPrefix & "if [ `ffprobe -show_streams -select_streams a " & thefile & "  2>/dev/null | grep -c \"mp4a\\|aac\"` -gt 0 ]; then exit 0; else exit 1; fi")
+                on error number error_number
+                    set notaac to true
+                end try
+            end if
             try
                 set newbitrate to (do shell script (cmdPrefix & "ffprobe -show_streams -select_streams a " & thefile & " 2>/dev/null | grep '^bit_rate=' | sed 's/bit_rate=\\([0-9][0-9]*\\)/\\1/' | sed 's/\\(.*\\).\\{3\\}/\\1/'") as text)
                 if (newbitrate as number) is greater than (bitrate as number) then set bitrate to (newbitrate as number)
