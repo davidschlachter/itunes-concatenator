@@ -29,6 +29,7 @@ script DASAppDelegate
     property catYear : missing value
     property radioType : missing value
     property progressField : missing value
+    property tocToLyrics : missing value
     
     -- Again, per macscripter, we'll set up bindings for the options
     property pcatName : ""
@@ -44,6 +45,7 @@ script DASAppDelegate
     property pcatYear : ""
     property missingPackages : ""
     property mediaTypeText : ""
+    property tocToLyricsValue : ""
     
     -- This set is for the tags
     property fcatName : ""
@@ -197,6 +199,7 @@ script DASAppDelegate
         set pcatYear to catYear's stringValue()
         set the_pipes to {}
         set mediaTypeText to (radioType's titleOfSelectedItem()) as string
+        set tocToLyricsValue to (tocToLyrics's state())
         
         try
             do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4* /private/tmp/cat.mp4"
@@ -360,19 +363,37 @@ script DASAppDelegate
                 display dialog "The tags could not be added to the concatenated audio file."
             end try
         end if
+        -- Grab the TOC, if needed
+        if not errorHappened then
+            if tocToLyricsValue is 1 then
+                progressField's setStringValue_("Getting TOC...")
+                try
+                    set tocText to (do shell script "/bin/cat /private/tmp/cat.chapters.txt")
+                on error error_number
+                    set errorHappened to true
+                    do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
+                    progressField's setStringValue_("")
+                    display dialog "The TOC could not be processed."
+                end try
+            end if
+        end if
         -- Add the finished track to iTunes
         if not errorHappened then
             progressField's setStringValue_("Adding to iTunes...")
             delay 0.2
             try
                 if mediaTypeText is "Music track" then
-                    set mediaType to "m4a"
+                    set mediaType to "m4a" as text
                 else if mediaTypeText is "Audiobook track" then
-                    set mediaType to "m4b"
+                    set mediaType to "m4b" as text
                 end if
                 do shell script ("/bin/mv /private/tmp/cat.mp4 /private/tmp/cat." & mediaType as text)
                 tell application "iTunes"
-                    add file (":private:tmp:cat." & mediaType as text)
+                    set aliasPath to POSIX file ("/private/tmp/cat." & mediaType as text) as alias
+                    set theAddedTrack to (add aliasPath)
+                    if tocToLyricsValue is 1 then
+                        set lyrics of theAddedTrack to tocText
+                    end if
                 end tell
             on error error_number
                 set errorHappened to true
