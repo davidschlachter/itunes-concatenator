@@ -64,6 +64,9 @@ script DASAppDelegate
     property pEachName : ""
     property pEachLocation : ""
     
+    property mediaType : ""
+    property theAddedTrack : ""
+    
     property these_titles : {}
     property these_files : {}
     property these_times: {}
@@ -237,11 +240,11 @@ script DASAppDelegate
                     do shell script (cmdPrefix & "ffmpeg -i " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " -c copy -f mpegts -loglevel fatal -vn /private/tmp/concat" & theIndex & ".ts" as text)
                     set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
                 end repeat
-            on error error_number
+            on error error_number number therror
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat*"
                 progressField's setStringValue_("")
-                display dialog "The tracks you selected could not be joined. An error occured when preparing the intermediate files."
+                display dialog "The tracks you selected could not be joined. An error occured when preparing the intermediate files. The error code was " & therror & ": " & error_number
             end try
             try
                 set olddelimeters to AppleScript's text item delimiters
@@ -251,11 +254,11 @@ script DASAppDelegate
                 delay 0.2
                 do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc -loglevel fatal /private/tmp/cat.mp4" as text)
                 set AppleScript's text item delimiters to olddelimeters
-            on error error_number
+            on error error_number number therror
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4"
                 progressField's setStringValue_("")
-                display dialog "The tracks could not be joined."
+                display dialog "The tracks could not be joined. The error code was " & therror & ": " & error_number
             end try
             else
             -- Concatenation routine for non-mp4/aac audio files
@@ -267,11 +270,11 @@ script DASAppDelegate
                     do shell script ("/bin/cp " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " /private/tmp/concat" & theIndex & ".ts" as text)
                     set end of the_pipes to ("concat" & theIndex & ".ts" as text)
                 end repeat
-            on error error_number
+            on error error_number number therror
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat*"
                 progressField's setStringValue_("")
-                display dialog "The tracks you selected could not be joined."
+                display dialog "The tracks you selected could not be joined. The error code was " & therror & ": " & error_number
             end try
             set olddelimeters to AppleScript's text item delimiters
             set AppleScript's text item delimiters to " "
@@ -281,11 +284,11 @@ script DASAppDelegate
             try
                 set scriptpath to (quoted form of POSIX path of (current application's NSBundle's mainBundle()'s bundlePath() as text & "/Contents/Resources/mmcat.sh")) & " "
                 do shell script ("cd /private/tmp && " & scriptpath & (bitrate as text) & " " & (disp_thepipes as text) & " cat.mp4" as text)
-            on error error_number
+            on error error_number number therror
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4"
                 progressField's setStringValue_("")
-                display dialog "The tracks could not be joined. An error occured during the reencoding."
+                display dialog "The tracks could not be joined. An error occured during the reencoding. The error code was " & therror & ": " & error_number
             end try
             set AppleScript's text item delimiters to olddelimeters
         end if
@@ -307,11 +310,11 @@ script DASAppDelegate
                         set theCounter to (theCounter + theNewCounter)
                     end if
                 end repeat
-            on error error_number
+            on error error_number number therror
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
                 progressField's setStringValue_("")
-                display dialog "The chapters could not be read from the tracks you had selected."
+                display dialog "The chapters could not be read from the tracks you had selected. The error code was " & therror & ": " & error_number
             end try
         end if
         -- Chapterize cat.mp4
@@ -320,11 +323,11 @@ script DASAppDelegate
                 progressField's setStringValue_("Chapterizing...")
                 delay 0.2
                 do shell script (cmdPrefix & "mp4chaps -i /private/tmp/cat.mp4" as text)
-            on error error_number
+            on error error_number number therror
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
                 progressField's setStringValue_("")
-                display dialog "The chapters could not be added to concatenated file."
+                display dialog "The chapters could not be added to concatenated file. The error code was " & therror & ": " & error_number
             end try
         end if
         -- Prepare tags
@@ -356,24 +359,25 @@ script DASAppDelegate
                 progressField's setStringValue_("Adding tags...")
                 delay 0.2
                 do shell script (cmdPrefix & "mp4tags " & fcatName & fcatAlbum & fcatArtist & fcatComposer & fcatGenre & fcatTrack & fcatTracks & fcatDisc & fcatDiscs & fcatAlbumArtist & fcatYear & " /private/tmp/cat.mp4" as text)
-            on error error_number
+            on error error_number number therror
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
                 progressField's setStringValue_("")
-                display dialog "The tags could not be added to the concatenated audio file."
+                display dialog "The tags could not be added to the concatenated audio file. The error code was " & therror & ": " & error_number
             end try
         end if
         -- Grab the TOC, if needed
         if not errorHappened then
             if tocToLyricsValue is 1 then
                 progressField's setStringValue_("Getting TOC...")
+                delay 0.2
                 try
                     set tocText to (do shell script "/bin/cat /private/tmp/cat.chapters.txt")
-                on error error_number
+                on error error_number number therror
                     set errorHappened to true
                     do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
                     progressField's setStringValue_("")
-                    display dialog "The TOC could not be processed."
+                    display dialog "The TOC could not be processed. The error code was " & therror & ": " & error_number
                 end try
             end if
         end if
@@ -391,15 +395,27 @@ script DASAppDelegate
                 tell application "iTunes"
                     set aliasPath to POSIX file ("/private/tmp/cat." & mediaType as text) as alias
                     set theAddedTrack to (add aliasPath)
-                    if tocToLyricsValue is 1 then
-                        set lyrics of theAddedTrack to tocText
-                    end if
                 end tell
-            on error error_number
+            on error error_number number therror
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt /private/tmp/cat." & mediaType
                 progressField's setStringValue_("")
-                display dialog "The concatenated file could not be added to iTunes."
+                display dialog "The concatenated file could not be added to iTunes.  The error code was " & therror & ": " & error_number
+            end try
+        end if
+        if not errorHappened and tocToLyricsValue is 1 then
+            progressField's setStringValue_("Adding TOC...")
+            delay 0.2
+            try
+                tell application "iTunes"
+                        set lyrics of theAddedTrack to tocText
+                end tell
+            on error error_number number therror
+                set errorHappened to true
+                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt /private/tmp/cat." & mediaType
+                progressField's setStringValue_("")
+                set the clipboard to tocText
+                display dialog "The lyrics tag for the TOC could not be set in iTunes. The error code was " & therror & ": " & error_number & " The TOC has been copied to the clipboard instead."
             end try
         end if
         -- Clean up
