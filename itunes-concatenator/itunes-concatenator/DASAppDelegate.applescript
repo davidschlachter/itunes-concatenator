@@ -405,7 +405,9 @@ script DASAppDelegate
         end if
         if not errorHappened and tocToLyricsValue is 1 then
             progressField's setStringValue_("Adding TOC...")
-            delay 0.2
+            -- Apparently fails if file is accessed too quickly
+            -- https://bugs.launchpad.net/maxosx/+bug/368342
+            delay 2
             try
                 tell application "iTunes"
                         set lyrics of theAddedTrack to tocText
