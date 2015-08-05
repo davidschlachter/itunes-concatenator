@@ -413,11 +413,21 @@ script DASAppDelegate
                         set lyrics of theAddedTrack to tocText
                 end tell
             on error error_number number therror
-                set errorHappened to true
-                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt /private/tmp/cat." & mediaType
-                progressField's setStringValue_("")
-                set the clipboard to tocText
-                display dialog "The lyrics tag for the TOC could not be set in iTunes. The error code was " & therror & ": " & error_number & " The TOC has been copied to the clipboard instead."
+            	try
+            		progressField's setStringValue_("Waiting ten seconds...")
+            		delay 9
+            		progressField's setStringValue_("Adding TOC...")
+            		delay 1
+            		tell application "iTunes"
+                        	set lyrics of theAddedTrack to tocText
+                	end tell
+            	on error innererror number innererrornumber
+            		set errorHappened to true
+                	do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt /private/tmp/cat." & mediaType
+                	progressField's setStringValue_("")
+                	set the clipboard to tocText
+                	display dialog "The lyrics tag for the TOC could not be set in iTunes. The error code was " & innererrornumber & ": " & innererror & " The TOC has been copied to the clipboard instead."
+            	end try
             end try
         end if
         -- Clean up
