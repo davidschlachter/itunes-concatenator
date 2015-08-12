@@ -1,6 +1,6 @@
 Like [Join Together](http://dougscripts.com/itunes/itinfo/jointogether.php), but with chapterizing again.
 
-Download the latest version: [Track Concatenator](https://github.com/davidschlachter/itunes-concatenator/blob/master/bin/Track-Concatenator_2015-07-25.zip?raw=true)
+Download the latest version: [Track Concatenator](https://github.com/davidschlachter/itunes-concatenator/blob/master/bin/Track-Concatenator_2015-08-12.zip?raw=true)
 
 More information at [Track Concatenator homepage](https://www.davidschlachter.com/misc/trackconcat).
 
