@@ -165,7 +165,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = DAS;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "David Schlachter";
 			};
 			buildConfigurationList = 6343466B19ACE1AA008396D2 /* Build configuration list for PBXProject "Track Concatenator" */;
@@ -261,6 +261,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -329,6 +330,7 @@
 				GCC_PREFIX_HEADER = "itunes-concatenator/Track Concatenator-Prefix.pch";
 				INFOPLIST_FILE = "itunes-concatenator/Track Concatenator-Info.plist";
 				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "redeft.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "Track Concatenator";
 				WRAPPER_EXTENSION = app;
 			};
@@ -347,6 +349,7 @@
 				GCC_PREFIX_HEADER = "itunes-concatenator/Track Concatenator-Prefix.pch";
 				INFOPLIST_FILE = "itunes-concatenator/Track Concatenator-Info.plist";
 				OTHER_LDFLAGS = "-Wl,-rpath,@loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "redeft.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "Track Concatenator";
 				WRAPPER_EXTENSION = app;
 			};
