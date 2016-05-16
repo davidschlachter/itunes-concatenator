@@ -11,7 +11,7 @@
 script DASAppDelegate
 	property parent : class "NSObject"
 	
-    global these_files, these_times, these_titles, the_index, the_pipes, theCounter, cmdPrefix
+    global these_files, these_times, these_titles, the_index, the_pipes, theCounter, cmdPrefix, randomPrefix
     
 	-- IBOutlets
 	property window : missing value
@@ -188,6 +188,15 @@ script DASAppDelegate
     end btnGetTracks_
 
     on btnConcatenate_(sender)
+        -- Generate the random prefix
+        -- via http://macscripter.net/viewtopic.php?id=12212
+        set randomPrefix to ""
+        repeat with x from 1 to 6
+            set randomChar to ASCII character (random number from 97 to 122)
+            set randomPrefix to randomPrefix & randomChar
+        end repeat
+        set randomPrefix to randomPrefix & "_"
+        
         -- Update the metadata variables with the user's input
         if catName's stringValue() is not "" then set pcatName to catName's stringValue()
         set pcatArtist to catArtist's stringValue()
@@ -204,9 +213,6 @@ script DASAppDelegate
         set mediaTypeText to (radioType's titleOfSelectedItem()) as string
         set tocToLyricsValue to (tocToLyrics's state())
         
-        try
-            do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4* /private/tmp/cat.mp4"
-        end try
         -- Initialize some variables
         set errorHappened to false
         set notaac to false
@@ -237,12 +243,12 @@ script DASAppDelegate
                 repeat with theIndex in the_index
                     progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
                     delay 0.2
-                    do shell script (cmdPrefix & "ffmpeg -i " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " -c copy -f mpegts -loglevel fatal -vn /private/tmp/concat" & theIndex & ".ts" as text)
-                    set end of the_pipes to ("/private/tmp/concat" & theIndex & ".ts" as text)
+                    do shell script (cmdPrefix & "ffmpeg -i " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " -c copy -f mpegts -loglevel fatal -vn /private/tmp/" & randomPrefix & "concat" & theIndex & ".ts" as text)
+                    set end of the_pipes to ("/private/tmp/" & randomPrefix & "concat" & theIndex & ".ts" as text)
                 end repeat
             on error error_number number therror
                 set errorHappened to true
-                do shell script "/bin/rm -f /private/tmp/concat*"
+                do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat*"
                 progressField's setStringValue_("")
                 display dialog "The tracks you selected could not be joined. An error occured when preparing the intermediate files. The error code was " & therror & ": " & error_number
             end try
@@ -252,11 +258,11 @@ script DASAppDelegate
                 set disp_thepipes to the_pipes as string
                 progressField's setStringValue_("Concatenating tracks...")
                 delay 0.2
-                do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc -loglevel fatal /private/tmp/cat.mp4" as text)
+                do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc -loglevel fatal /private/tmp/" & randomPrefix & "cat.mp4" as text)
                 set AppleScript's text item delimiters to olddelimeters
             on error error_number number therror
                 set errorHappened to true
-                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4"
+                do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4"
                 progressField's setStringValue_("")
                 display dialog "The tracks could not be joined. The error code was " & therror & ": " & error_number
             end try
@@ -267,12 +273,12 @@ script DASAppDelegate
                     progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
                     delay 0.2
                     -- No spaces allowed in paths for the script...
-                    do shell script ("/bin/cp " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " /private/tmp/concat" & theIndex & ".ts" as text)
+                    do shell script ("/bin/cp " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " /private/tmp/" & randomPrefix & "concat" & theIndex & ".ts" as text)
                     set end of the_pipes to ("concat" & theIndex & ".ts" as text)
                 end repeat
             on error error_number number therror
                 set errorHappened to true
-                do shell script "/bin/rm -f /private/tmp/concat*"
+                do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat*"
                 progressField's setStringValue_("")
                 display dialog "The tracks you selected could not be joined. The error code was " & therror & ": " & error_number
             end try
@@ -283,10 +289,10 @@ script DASAppDelegate
             delay 0.2
             try
                 set scriptpath to (quoted form of POSIX path of (current application's NSBundle's mainBundle()'s bundlePath() as text & "/Contents/Resources/mmcat.sh")) & " "
-                do shell script ("cd /private/tmp && " & scriptpath & (bitrate as text) & " " & (disp_thepipes as text) & " cat.mp4" as text)
+                do shell script ("cd /private/tmp/" & randomPrefix & " && " & scriptpath & (bitrate as text) & " " & (disp_thepipes as text) & " cat.mp4" as text)
             on error error_number number therror
                 set errorHappened to true
-                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4"
+                do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4"
                 progressField's setStringValue_("")
                 display dialog "The tracks could not be joined. An error occured during the reencoding. The error code was " & therror & ": " & error_number
             end try
@@ -299,20 +305,20 @@ script DASAppDelegate
             try
                 repeat with theIndex in the_index
                     if theIndex < 2 then
-                        do shell script ("/bin/echo \"00:00:00.000 " & (item theIndex of these_titles as text) & "\" > /private/tmp/cat.chapters.txt" as text)
-                        set theCounter to (do shell script (cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\.[0-9]*\\)/\\1/'" as text) as string)
+                        do shell script ("/bin/echo \"00:00:00.000 " & (item theIndex of these_titles as text) & "\" > /private/tmp/" & randomPrefix & "cat.chapters.txt" as text)
+                        set theCounter to (do shell script (cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/" & randomPrefix & "concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\.[0-9]*\\)/\\1/'" as text) as string)
                         set theCounter to (do shell script ("/bin/echo $(/usr/bin/printf %.$2f $(/bin/echo \"`/usr/bin/printf %.3f " & theCounter & "` * 1000\" | /usr/bin/bc))") as string)
                     else
                         set theDateStamp to do shell script (cmdPrefix & "t="& (theCounter as text) & ";((msec=t%1000, t/=1000, sec=t%60, t/=60, min=t%60, hrs=t/60));timestamp=$(printf \"%02d:%02d:%02d.%03d\" $hrs $min $sec $msec);/bin/echo $timestamp" as text)
-                        do shell script ("/bin/echo \"" & (theDateStamp as text) & " " & (item theIndex of these_titles as text) & "\" >> /private/tmp/cat.chapters.txt" as text)
-                        set theNewCounter to do shell script ((cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\.[0-9]*\\)/\\1/'" as text) as string)
+                        do shell script ("/bin/echo \"" & (theDateStamp as text) & " " & (item theIndex of these_titles as text) & "\" >> /private/tmp/" & randomPrefix & "cat.chapters.txt" as text)
+                        set theNewCounter to do shell script ((cmdPrefix & "ffprobe -loglevel panic -show_streams /private/tmp/" & randomPrefix & "concat" & (theIndex as text) & ".ts | egrep -m 1 'duration=[0-9]+\\.' | sed 's/duration=\\([0-9]*[0-9]\\.[0-9]*\\)/\\1/'" as text) as string)
                         set theNewCounter to do shell script ("/bin/echo $(/usr/bin/printf %.$2f $(/bin/echo \"`/usr/bin/printf %.3f " & theNewCounter & "` * 1000\" | /usr/bin/bc))") as string
                         set theCounter to (theCounter + theNewCounter)
                     end if
                 end repeat
             on error error_number number therror
                 set errorHappened to true
-                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
+                do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt"
                 progressField's setStringValue_("")
                 display dialog "The chapters could not be read from the tracks you had selected. The error code was " & therror & ": " & error_number
             end try
@@ -322,10 +328,10 @@ script DASAppDelegate
             try
                 progressField's setStringValue_("Chapterizing...")
                 delay 0.2
-                do shell script (cmdPrefix & "mp4chaps -i /private/tmp/cat.mp4" as text)
+                do shell script (cmdPrefix & "mp4chaps -i /private/tmp/" & randomPrefix & "cat.mp4" as text)
             on error error_number number therror
                 set errorHappened to true
-                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
+                do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt"
                 progressField's setStringValue_("")
                 display dialog "The chapters could not be added to concatenated file. The error code was " & therror & ": " & error_number
             end try
@@ -358,10 +364,10 @@ script DASAppDelegate
             try
                 progressField's setStringValue_("Adding tags...")
                 delay 0.2
-                do shell script (cmdPrefix & "mp4tags " & fcatName & fcatAlbum & fcatArtist & fcatComposer & fcatGenre & fcatTrack & fcatTracks & fcatDisc & fcatDiscs & fcatAlbumArtist & fcatYear & " /private/tmp/cat.mp4" as text)
+                do shell script (cmdPrefix & "mp4tags " & fcatName & fcatAlbum & fcatArtist & fcatComposer & fcatGenre & fcatTrack & fcatTracks & fcatDisc & fcatDiscs & fcatAlbumArtist & fcatYear & " /private/tmp/" & randomPrefix & "cat.mp4" as text)
             on error error_number number therror
                 set errorHappened to true
-                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
+                do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt"
                 progressField's setStringValue_("")
                 display dialog "The tags could not be added to the concatenated audio file. The error code was " & therror & ": " & error_number
             end try
@@ -372,10 +378,10 @@ script DASAppDelegate
                 progressField's setStringValue_("Getting TOC...")
                 delay 0.2
                 try
-                    set tocText to (do shell script "/bin/cat /private/tmp/cat.chapters.txt")
+                    set tocText to (do shell script "/bin/cat /private/tmp/" & randomPrefix & "cat.chapters.txt")
                 on error error_number number therror
                     set errorHappened to true
-                    do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt"
+                    do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt"
                     progressField's setStringValue_("")
                     display dialog "The TOC could not be processed. The error code was " & therror & ": " & error_number
                 end try
@@ -391,14 +397,14 @@ script DASAppDelegate
                 else if mediaTypeText is "Audiobook track" then
                     set mediaType to "m4b" as text
                 end if
-                do shell script ("/bin/mv /private/tmp/cat.mp4 /private/tmp/cat." & mediaType as text)
+                do shell script ("/bin/mv /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat." & mediaType as text)
                 tell application "iTunes"
-                    set aliasPath to POSIX file ("/private/tmp/cat." & mediaType as text) as alias
+                    set aliasPath to POSIX file ("/private/tmp/" & randomPrefix & "cat." & mediaType as text) as alias
                     set theAddedTrack to (add aliasPath)
                 end tell
             on error error_number number therror
                 set errorHappened to true
-                do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt /private/tmp/cat." & mediaType
+                do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt /private/tmp/" & randomPrefix & "cat." & mediaType
                 progressField's setStringValue_("")
                 display dialog "The concatenated file could not be added to iTunes.  The error code was " & therror & ": " & error_number
             end try
@@ -423,7 +429,7 @@ script DASAppDelegate
                 	end tell
             	on error innererror number innererrornumber
             		set errorHappened to true
-                	do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.mp4 /private/tmp/cat.chapters.txt /private/tmp/cat." & mediaType
+                	do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt /private/tmp/" & randomPrefix & "cat." & mediaType
                 	progressField's setStringValue_("")
                 	set the clipboard to tocText
                 	display dialog "The lyrics tag for the TOC could not be set in iTunes. The error code was " & innererrornumber & ": " & innererror & " The TOC has been copied to the clipboard instead."
@@ -431,7 +437,7 @@ script DASAppDelegate
             end try
         end if
         -- Clean up
-        do shell script "/bin/rm -f /private/tmp/concat* /private/tmp/cat.chapters.txt /private/tmp/cat.m4*"
+        do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.chapters.txt /private/tmp/" & randomPrefix & "cat.m4*"
         set theCounter to ""
         progressField's setStringValue_("")
     end btnConcatenate_
@@ -450,3 +456,4 @@ script DASAppDelegate
 	end applicationShouldTerminate_
 
 end script
+
