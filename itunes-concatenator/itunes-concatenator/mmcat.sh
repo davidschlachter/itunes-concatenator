@@ -53,7 +53,7 @@ cat $all_a > $TMP/mcs_a_all &
 ################################################################################
 # finally, encode the raw concatenated audio/video into something useful
 ################################################################################
-ffmpeg -f u16le -acodec pcm_s16le -ac 2 -ar 44100 -i $TMP/mcs_a_all \
+ffmpeg -f u16le -acodec pcm_s16le -vn -ac 2 -ar 44100 -i $TMP/mcs_a_all \
 	$EXTRA_OPTIONS \
 	$last
 

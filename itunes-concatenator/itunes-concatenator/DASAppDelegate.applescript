@@ -244,7 +244,7 @@ script DASAppDelegate
                 repeat with theIndex in the_index
                     progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
                     delay 0.2
-                    do shell script (cmdPrefix & "ffmpeg -i " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " -c copy -f mpegts -loglevel fatal -vn /private/tmp/" & randomPrefix & "concat" & theIndex & ".ts" as text)
+                    do shell script (cmdPrefix & "ffmpeg -i " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " -c copy -vn -f mpegts -loglevel fatal -vn /private/tmp/" & randomPrefix & "concat" & theIndex & ".ts" as text)
                     set end of the_pipes to ("/private/tmp/" & randomPrefix & "concat" & theIndex & ".ts" as text)
                 end repeat
             on error error_number number therror
@@ -259,7 +259,7 @@ script DASAppDelegate
                 set disp_thepipes to the_pipes as string
                 progressField's setStringValue_("Concatenating tracks...")
                 delay 0.2
-                do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -bsf:a aac_adtstoasc -loglevel fatal /private/tmp/" & randomPrefix & "cat.mp4" as text)
+                do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -vn -bsf:a aac_adtstoasc -loglevel fatal /private/tmp/" & randomPrefix & "cat.mp4" as text)
                 set AppleScript's text item delimiters to olddelimeters
             on error error_number number therror
                 set errorHappened to true
