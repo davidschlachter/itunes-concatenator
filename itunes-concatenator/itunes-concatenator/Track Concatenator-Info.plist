@@ -26,6 +26,8 @@
 	<string>public.app-category.utilities</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Track Concatenator needs permission to interact with other applications such as iTunes in order to join tracks, and the Terminal to install required packages.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © David Schlachter. All rights reserved.</string>
 	<key>NSMainNibFile</key>

@@ -74,6 +74,7 @@ script DASAppDelegate
     property the_pipes: {}
     
     property quitme : 0
+    property ffmpegmissing : 0
     
     property theCounter : ""
     property cmdPrefix : "if [[ -r /etc/profile ]];then . /etc/profile;fi;if [[ -r ~/.bashrc ]];then . ~/.bashrc;fi;if [[ -r ~/.bash_profile ]];then . ~/.bash_profile;fi;"
@@ -102,7 +103,7 @@ script DASAppDelegate
             display dialog "You must install the following programs to continue: \n\t" & missingPackages & " \n\nYou may have to install Xcode Command Line Tools and Homebrew first. If you continue, we'll attempt to install them for you if they are not already present. \n\nIf you have already installed FFMPEG and MP4v2, ensure that they are in your bash path." buttons {"Quit","Install"} default button 2
             if result = {button returned:"Install"} then
                 tell application "Terminal"
-                    set newTab to do script cmdPrefix & "if [[ -x `which brew` ]];then brew update;brew prune;brew install ffmpeg mp4v2 && exit 0;else /usr/bin/ruby -e \"$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\";brew update;brew prune;brew install ffmpeg mp4v2 && exit 0;fi"
+                    set newTab to do script cmdPrefix & "if [[ -x `which brew` ]];then brew update;brew install ffmpeg mp4v2 && exit 0;else /usr/bin/ruby -e \"$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\";brew update;brew install ffmpeg mp4v2 && exit 0;fi"
                     delay 1
                     activate
                     -- Check for when the Terminal is done
@@ -121,7 +122,7 @@ script DASAppDelegate
                     display dialog "Installation was successful!" buttons {"OK"} default button "OK"
                     on error error_number
                     activate
-                    display dialog "Homebrew, FFMPEG and/or MP4v2 could not be installed."
+                    display dialog "Homebrew, FFMPEG and/or MP4v2 could not be installed. Check the Terminal for error messages and additional information."
                     set quitme to 1 -- Exit if we couldn't install!
                 end try
                 else if result = {button returned:"Quit"} then
