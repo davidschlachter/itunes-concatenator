@@ -275,7 +275,7 @@ script DASAppDelegate
                     delay 0.2
                     -- No spaces allowed in paths for the script...
                     do shell script ("/bin/cp " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " /private/tmp/" & randomPrefix & "concat" & theIndex & ".ts" as text)
-                    set end of the_pipes to ("concat" & theIndex & ".ts" as text)
+                    set end of the_pipes to (randomPrefix & "concat" & theIndex & ".ts" as text)
                 end repeat
             on error error_number number therror
                 set errorHappened to true
@@ -290,7 +290,7 @@ script DASAppDelegate
             delay 0.2
             try
                 set scriptpath to (quoted form of POSIX path of (current application's NSBundle's mainBundle()'s bundlePath() as text & "/Contents/Resources/mmcat.sh")) & " "
-                do shell script ("cd /private/tmp/" & randomPrefix & " && " & scriptpath & (bitrate as text) & " " & (disp_thepipes as text) & " cat.mp4" as text)
+                do shell script "cd /private/tmp/ && " & scriptpath & (bitrate as text) & " " & (disp_thepipes as text) & " " & randomPrefix & "cat.mp4"
             on error error_number number therror
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4"
