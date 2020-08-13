@@ -1,8 +1,8 @@
 Like [Join Together](http://dougscripts.com/itunes/itinfo/jointogether.php), but with chapterizing again.
 
-Not tested on macOS 10.15 Catalina (tested with iTunes only, Mac OS X 10.6 - macOS 10.14)
+Works both in macOS 10.15 Catalina's Music app as well as in iTunes on earlier versions from at least Mac OS X 10.9.
 
-Download the latest version: [Track Concatenator](https://github.com/davidschlachter/itunes-concatenator/blob/master/bin/Track-Concatenator_2015-08-12.zip?raw=true)
+Download the latest version: [Track Concatenator](https://github.com/davidschlachter/itunes-concatenator/blob/master/bin/Track-Concatenator_2020-08-13.zip?raw=true)
 
 More information at [Track Concatenator homepage](https://www.davidschlachter.com/misc/trackconcat).
 
