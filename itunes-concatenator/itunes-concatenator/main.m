@@ -3,7 +3,7 @@
 //  itunes-concatenator
 //
 //  Created by David Schlachter on 2014-08-26.
-//  Copyright (c) 2014 Red Eft Software. All rights reserved.
+//  Copyright (c) David Schalchter. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
