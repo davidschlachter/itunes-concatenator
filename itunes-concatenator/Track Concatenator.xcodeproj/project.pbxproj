@@ -170,7 +170,7 @@
 			};
 			buildConfigurationList = 6343466B19ACE1AA008396D2 /* Build configuration list for PBXProject "Track Concatenator" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
