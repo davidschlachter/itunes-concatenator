@@ -3,7 +3,7 @@
 --  itunes-concatenator
 --
 --  Created by David Schlachter on 2014-08-26.
---  Copyright (c) 2014 Red Eft Software. All rights reserved.
+--  Copyright (c) David Schlachter. All rights reserved.
 --
 
 -- via http://macscripter.net/viewtopic.php?pid=173787 ; apparently needed for using arrays
@@ -27,7 +27,6 @@ script DASAppDelegate
     property catDiscs : missing value
     property catAlbumArtist : missing value
     property catYear : missing value
-    property radioType : missing value
     property progressField : missing value
     property tocToLyrics : missing value
     
@@ -136,36 +135,74 @@ script DASAppDelegate
     on btnGetTracks_(sender)
         -- Code to add iTunes tracks to our list
         -- via http://dougscripts.com/itunes/itinfo/info02.php and http://www.randomsequence.com/articles/applescript-to-send-selected-itunes-tracks-using-mail/
-        tell application "iTunes"
-            set these_titles to {}
-            set these_times to {}
-            set these_files to {}
-            set the_index to {}
-            if selection is not {} then -- there ARE tracks selected...
-                set mySelection to selection
-                set i to 1
-                repeat with aTrack in mySelection
-                    if class of aTrack is file track then
-                        set end of these_titles to ((name of aTrack) as string)
-                        set end of these_times to ((time of aTrack) as string)
-                        set end of these_files to (posix path of (get location of aTrack))
-                        set end of the_index to (count of these_titles)
-                        -- Get metadata from the first track
-                        if i is 1 then
-                            set pcatArtist to ((artist of aTrack) as string)
-                            set pcatAlbum to ((album of aTrack) as string)
-                            set pcatComposer to ((composer of aTrack) as string)
-                            set pcatGenre to ((genre of aTrack) as string)
-                            set pcatDisc to ((disc number of aTrack) as string)
-                            set pcatDiscs to ((disc count of aTrack) as string)
-                            set pcatAlbumArtist to ((album artist of aTrack) as string)
-                            set pcatYear to ((year of aTrack) as string)
+        -- New in 2020: messily duplicate this code so as to use either iTunes or the Music app depending on the macOS version (if at least Catalina, use the Music app)
+        set _versionString to system version of (system info)
+        considering numeric strings
+            set hasMusicApp to _versionString ≥ "10.15"
+        end considering
+        if hasMusicApp then
+            tell application id "com.apple.Music"
+                set these_titles to {}
+                set these_times to {}
+                set these_files to {}
+                set the_index to {}
+                if selection is not {} then -- there ARE tracks selected...
+                    set mySelection to selection
+                    set i to 1
+                    repeat with aTrack in mySelection
+                        if class of aTrack is file track then
+                            set end of these_titles to ((name of aTrack) as string)
+                            set end of these_times to ((time of aTrack) as string)
+                            set end of these_files to (posix path of (get location of aTrack))
+                            set end of the_index to (count of these_titles)
+                            -- Get metadata from the first track
+                            if i is 1 then
+                                set pcatArtist to ((artist of aTrack) as string)
+                                set pcatAlbum to ((album of aTrack) as string)
+                                set pcatComposer to ((composer of aTrack) as string)
+                                set pcatGenre to ((genre of aTrack) as string)
+                                set pcatDisc to ((disc number of aTrack) as string)
+                                set pcatDiscs to ((disc count of aTrack) as string)
+                                set pcatAlbumArtist to ((album artist of aTrack) as string)
+                                set pcatYear to ((year of aTrack) as string)
+                            end if
+                            set i to (i + 1)
                         end if
-                        set i to (i + 1)
-                    end if
-                end repeat
-            end if
-        end tell
+                    end repeat
+                end if
+            end tell
+        else
+            tell application id "com.apple.iTunes"
+                set these_titles to {}
+                set these_times to {}
+                set these_files to {}
+                set the_index to {}
+                if selection is not {} then -- there ARE tracks selected...
+                    set mySelection to selection
+                    set i to 1
+                    repeat with aTrack in mySelection
+                        if class of aTrack is file track then
+                            set end of these_titles to ((name of aTrack) as string)
+                            set end of these_times to ((time of aTrack) as string)
+                            set end of these_files to (posix path of (get location of aTrack))
+                            set end of the_index to (count of these_titles)
+                            -- Get metadata from the first track
+                            if i is 1 then
+                                set pcatArtist to ((artist of aTrack) as string)
+                                set pcatAlbum to ((album of aTrack) as string)
+                                set pcatComposer to ((composer of aTrack) as string)
+                                set pcatGenre to ((genre of aTrack) as string)
+                                set pcatDisc to ((disc number of aTrack) as string)
+                                set pcatDiscs to ((disc count of aTrack) as string)
+                                set pcatAlbumArtist to ((album artist of aTrack) as string)
+                                set pcatYear to ((year of aTrack) as string)
+                            end if
+                            set i to (i + 1)
+                        end if
+                    end repeat
+                end if
+            end tell
+        end if
         -- Display the songs to be concatenated
         -- via http://stackoverflow.com/questions/25537750/setstringvalue-with-applescript-list
         set olddelimeters to AppleScript's text item delimiters
@@ -211,7 +248,7 @@ script DASAppDelegate
         set pcatAlbumArtist to catAlbumArtist's stringValue()
         set pcatYear to catYear's stringValue()
         set the_pipes to {}
-        set mediaTypeText to (radioType's titleOfSelectedItem()) as string
+        set mediaTypeText to "Music track"
         set tocToLyricsValue to (tocToLyrics's state())
         
         -- Initialize some variables
@@ -390,7 +427,15 @@ script DASAppDelegate
         end if
         -- Add the finished track to iTunes
         if not errorHappened then
-            progressField's setStringValue_("Adding to iTunes...")
+            set _versionString to system version of (system info)
+            considering numeric strings
+                set hasMusicApp to _versionString ≥ "10.15"
+            end considering
+            if hasMusicApp then
+                progressField's setStringValue_("Adding to Music app...")
+            else
+                progressField's setStringValue_("Adding to iTunes...")
+            end if
             delay 0.2
             try
                 if mediaTypeText is "Music track" then
@@ -399,15 +444,27 @@ script DASAppDelegate
                     set mediaType to "m4b" as text
                 end if
                 do shell script ("/bin/mv /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat." & mediaType as text)
-                tell application "iTunes"
-                    set aliasPath to POSIX file ("/private/tmp/" & randomPrefix & "cat." & mediaType as text) as alias
-                    set theAddedTrack to (add aliasPath)
-                end tell
+                -- Again, check if we're on Catalina or not
+                set _versionString to system version of (system info)
+                considering numeric strings
+                    set hasMusicApp to _versionString ≥ "10.15"
+                end considering
+                if hasMusicApp then
+                    tell application id "com.apple.Music"
+                        set aliasPath to POSIX file ("/private/tmp/" & randomPrefix & "cat." & mediaType as text) as alias
+                        set theAddedTrack to (add aliasPath)
+                    end tell
+                else
+                    tell application id "com.apple.iTunes"
+                        set aliasPath to POSIX file ("/private/tmp/" & randomPrefix & "cat." & mediaType as text) as alias
+                        set theAddedTrack to (add aliasPath)
+                    end tell
+                end if
             on error error_number number therror
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt /private/tmp/" & randomPrefix & "cat." & mediaType
                 progressField's setStringValue_("")
-                display dialog "The concatenated file could not be added to iTunes.  The error code was " & therror & ": " & error_number
+                display dialog "The concatenated file could not be added to iTunes or the Music app.  The error code was " & therror & ": " & error_number
             end try
         end if
         if not errorHappened and tocToLyricsValue is 1 then
@@ -416,24 +473,44 @@ script DASAppDelegate
             -- https://bugs.launchpad.net/maxosx/+bug/368342
             delay 2
             try
-                tell application "iTunes"
-                        set lyrics of theAddedTrack to tocText
-                end tell
+                set _versionString to system version of (system info)
+                considering numeric strings
+                    set hasMusicApp to _versionString ≥ "10.15"
+                end considering
+                if hasMusicApp then
+                    tell application id "com.apple.Music"
+                            set lyrics of theAddedTrack to tocText
+                    end tell
+                else
+                    tell application id "com.apple.iTunes"
+                           set lyrics of theAddedTrack to tocText
+                   end tell
+                end if
             on error error_number number therror
             	try
             		progressField's setStringValue_("Waiting ten seconds...")
             		delay 9
             		progressField's setStringValue_("Adding TOC...")
             		delay 1
-            		tell application "iTunes"
-                        	set lyrics of theAddedTrack to tocText
-                	end tell
+                    set _versionString to system version of (system info)
+                    considering numeric strings
+                        set hasMusicApp to _versionString ≥ "10.15"
+                    end considering
+                    if hasMusicApp then
+                        tell application id "com.apple.Music"
+                                set lyrics of theAddedTrack to tocText
+                        end tell
+                    else
+                        tell application id "com.apple.iTunes"
+                                set lyrics of theAddedTrack to tocText
+                        end tell
+                    end if
             	on error innererror number innererrornumber
             		set errorHappened to true
                 	do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt /private/tmp/" & randomPrefix & "cat." & mediaType
                 	progressField's setStringValue_("")
                 	set the clipboard to tocText
-                	display dialog "The lyrics tag for the TOC could not be set in iTunes. The error code was " & innererrornumber & ": " & innererror & " The TOC has been copied to the clipboard instead."
+                	display dialog "The lyrics tag for the TOC could not be set in iTunes or the Music app. The error code was " & innererrornumber & ": " & innererror & " The TOC has been copied to the clipboard instead."
             	end try
             end try
         end if
