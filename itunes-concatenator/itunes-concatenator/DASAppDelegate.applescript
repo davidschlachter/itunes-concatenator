@@ -98,9 +98,21 @@ script DASAppDelegate
             end if
         end try
         
+        set locale to user locale of (get system info)
         if missingPackages is not "" then
-            display dialog "You must install the following programs to continue: \n\t" & missingPackages & " \n\nYou may have to install Xcode Command Line Tools and Homebrew first. If you continue, we'll attempt to install them for you if they are not already present. \n\nIf you have already installed FFMPEG and MP4v2, ensure that they are in your bash path." buttons {"Quit","Install"} default button 2
-            if result = {button returned:"Install"} then
+            set theySaidYes to false
+            if locale starts with "fr" then
+                display dialog "Pour continuer, installez les programmes suivants : \n\t" & missingPackages & " \n\nSi vous choissisez l'option \"Installer\", nous tenterons de les installer. Il est possible qu'on vous demande aussi d'installer Xcode Command Line Tools et Homebrew s'ils ne sont présents non plus. \n\nSi vous avez déjà installé FFMPEG et MP4v2, veiller à ce qu'ils sont dans votre PATH." buttons {"Quitter","Installer"} default button 2
+                if result = {button returned:"Installer"} then
+                    set theySaidYes to true
+                end if
+            else
+                display dialog "You must install the following programs to continue: \n\t" & missingPackages & " \n\nYou may have to install Xcode Command Line Tools and Homebrew first. If you continue, we'll attempt to install them for you if they are not already present. \n\nIf you have already installed FFMPEG and MP4v2, ensure that they are in your bash path." buttons {"Quit","Install"} default button 2
+                if result = {button returned:"Install"} then
+                    set theySaidYes to true
+                end if
+            end if
+            if theySaidYes then
                 tell application "Terminal"
                     set newTab to do script cmdPrefix & "if [[ -x `which brew` ]];then brew update;brew install ffmpeg mp4v2 && exit 0;else /usr/bin/ruby -e \"$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\";brew update;brew install ffmpeg mp4v2 && exit 0;fi"
                     delay 1
@@ -118,10 +130,20 @@ script DASAppDelegate
                     do shell script cmdPrefix & " if [ -x \"`/usr/bin/which ffmpeg`\" -a -x \"`/usr/bin/which mp4chaps`\" ];then exit 0;else exit 1;fi"
                     tell application "Terminal" to quit
                     activate
-                    display dialog "Installation was successful!" buttons {"OK"} default button "OK"
-                    on error error_number
+                    set locale to user locale of (get system info)
+                    if locale starts with "fr" then
+                        display dialog "L'installation a réussi." buttons {"OK"} default button "OK"
+                    else
+                        display dialog "Installation was successful!" buttons {"OK"} default button "OK"
+                    end if
+                on error error_number
                     activate
-                    display dialog "Homebrew, FFMPEG and/or MP4v2 could not be installed. Check the Terminal for error messages and additional information."
+                    set locale to user locale of (get system info)
+                    if locale starts with "fr" then
+                        display dialog "Homebrew, FFMPEG et / ou MP4v2 ne pouvaient pas être installés. Vérifiez les messages dans Terminal pour plus d'information."
+                    else
+                        display dialog "Homebrew, FFMPEG and/or MP4v2 could not be installed. Check the Terminal for error messages and additional information."
+                    end if
                     set quitme to 1 -- Exit if we couldn't install!
                 end try
                 else if result = {button returned:"Quit"} then
@@ -226,6 +248,7 @@ script DASAppDelegate
     end btnGetTracks_
 
     on btnConcatenate_(sender)
+        set locale to user locale of (get system info)
         -- Generate the random prefix
         -- via http://macscripter.net/viewtopic.php?id=12212
         set randomPrefix to ""
@@ -256,7 +279,11 @@ script DASAppDelegate
         set notaac to false
         set bitrate to 0
          -- Check if the audio files are all aac / mp4a
-        progressField's setStringValue_("Determining filetypes...")
+        if locale starts with "fr" then
+            progressField's setStringValue_("Déterminant le type des fichiers...")
+        else
+            progressField's setStringValue_("Determining filetypes...")
+        end if
          delay 0.2
         repeat with theIndex in the_index
             set thefile to (quoted form of POSIX path of (item theIndex of these_files as text))
@@ -279,7 +306,11 @@ script DASAppDelegate
             -- Concatenation routine for mp4/aac files
             try
                 repeat with theIndex in the_index
-                    progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
+                    if locale starts with "fr" then
+                        progressField's setStringValue_("Préparant la piste " & (theIndex as text) & "..." as text)
+                    else
+                        progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
+                    end if
                     delay 0.2
                     do shell script (cmdPrefix & "ffmpeg -i " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " -c copy -vn -f mpegts -loglevel fatal -vn /private/tmp/" & randomPrefix & "concat" & theIndex & ".ts" as text)
                     set end of the_pipes to ("/private/tmp/" & randomPrefix & "concat" & theIndex & ".ts" as text)
@@ -288,13 +319,21 @@ script DASAppDelegate
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat*"
                 progressField's setStringValue_("")
-                display dialog "The tracks you selected could not be joined. An error occured when preparing the intermediate files. The error code was " & therror & ": " & error_number
+                if locale starts with "fr" then
+                    display dialog "Les pistes séléctionnées n'ont pas été fusionnées. Une erreur s'est produite lors de la préparation des fichiers intermédiaires. Le code d'erreur était " & therror & ": " & error_number
+                else
+                    display dialog "The tracks you selected could not be joined. An error occured when preparing the intermediate files. The error code was " & therror & ": " & error_number
+                end if
             end try
             try
                 set olddelimeters to AppleScript's text item delimiters
                 set AppleScript's text item delimiters to "|"
                 set disp_thepipes to the_pipes as string
-                progressField's setStringValue_("Concatenating tracks...")
+                if locale starts with "fr" then
+                    progressField's setStringValue_("Fusionnant les pistes...")
+                else
+                    progressField's setStringValue_("Concatenating tracks...")
+                end if
                 delay 0.2
                 do shell script (cmdPrefix & "ffmpeg -f mpegts -i \"concat:" & (disp_thepipes as text) & "\" -c copy -vn -bsf:a aac_adtstoasc -loglevel fatal /private/tmp/" & randomPrefix & "cat.mp4" as text)
                 set AppleScript's text item delimiters to olddelimeters
@@ -302,13 +341,21 @@ script DASAppDelegate
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4"
                 progressField's setStringValue_("")
-                display dialog "The tracks could not be joined. The error code was " & therror & ": " & error_number
+                if locale starts with "fr" then
+                    display dialog "Les pistes séléctionnées n'ont pas été fusionnées. Le code d'erreur était " & therror & ": " & error_number
+                else
+                    display dialog "The tracks could not be joined. The error code was " & therror & ": " & error_number
+                end if
             end try
             else
             -- Concatenation routine for non-mp4/aac audio files
             try
                 repeat with theIndex in the_index
-                    progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
+                    if locale starts with "fr" then
+                        progressField's setStringValue_("Préparant la piste " & (theIndex as text) & "..." as text)
+                    else
+                        progressField's setStringValue_("Preparing track " & (theIndex as text) & "..." as text)
+                    end if
                     delay 0.2
                     -- No spaces allowed in paths for the script...
                     do shell script ("/bin/cp " & (quoted form of POSIX path of (item theIndex of these_files as text)) & " /private/tmp/" & randomPrefix & "concat" & theIndex & ".ts" as text)
@@ -318,12 +365,20 @@ script DASAppDelegate
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat*"
                 progressField's setStringValue_("")
-                display dialog "The tracks you selected could not be joined. The error code was " & therror & ": " & error_number
+                if locale starts with "fr" then
+                    display dialog "Les pistes séléctionnées n'ont pas été fusionnées. Une erreur s'est produite lors de la préparation des fichiers intermédiaires. Le code d'erreur était " & therror & ": " & error_number
+                else
+                    display dialog "The tracks you selected could not be joined. An error occured when preparing the intermediate files. The error code was " & therror & ": " & error_number
+                end if
             end try
             set olddelimeters to AppleScript's text item delimiters
             set AppleScript's text item delimiters to " "
             set disp_thepipes to the_pipes as string
-            progressField's setStringValue_("Concatenating tracks...")
+            if locale starts with "fr" then
+                progressField's setStringValue_("Fusionnant les pistes...")
+            else
+                progressField's setStringValue_("Concatenating tracks...")
+            end if
             delay 0.2
             try
                 set scriptpath to (quoted form of POSIX path of (current application's NSBundle's mainBundle()'s bundlePath() as text & "/Contents/Resources/mmcat.sh")) & " "
@@ -332,13 +387,21 @@ script DASAppDelegate
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4"
                 progressField's setStringValue_("")
-                display dialog "The tracks could not be joined. An error occured during the reencoding. The error code was " & therror & ": " & error_number
+                if locale starts with "fr" then
+                    display dialog "Les pistes séléctionnées n'ont pas été fusionnées. Une erreur s'est produite lors du réencodage. Le code d'erreur était " & therror & ": " & error_number
+                else
+                    display dialog "The tracks could not be joined. An error occured during the reencoding. The error code was " & therror & ": " & error_number
+                end if
             end try
             set AppleScript's text item delimiters to olddelimeters
         end if
         -- Now let's create the chapter file
         if not errorHappened then
-            progressField's setStringValue_("Preparing chapters...")
+            if locale starts with "fr" then
+                progressField's setStringValue_("Preparant les chapitres...")
+            else
+                progressField's setStringValue_("Preparing chapters...")
+            end if
             delay 0.2
             try
                 repeat with theIndex in the_index
@@ -358,20 +421,32 @@ script DASAppDelegate
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt"
                 progressField's setStringValue_("")
-                display dialog "The chapters could not be read from the tracks you had selected. The error code was " & therror & ": " & error_number
+                if locale starts with "fr" then
+                    display dialog "Les chapitres ne pouvaient pas être créés à partir des pistes sélectionnées. Le code d'erreur était " & therror & ": " & error_number
+                else
+                    display dialog "The chapters could not be read from the tracks you had selected. The error code was " & therror & ": " & error_number
+                end if
             end try
         end if
         -- Chapterize cat.mp4
         if not errorHappened then
             try
-                progressField's setStringValue_("Chapterizing...")
+                if locale starts with "fr" then
+                    progressField's setStringValue_("Ajout des chapitres...")
+                else
+                    progressField's setStringValue_("Chapterizing...")
+                end if
                 delay 0.2
                 do shell script (cmdPrefix & "mp4chaps -i /private/tmp/" & randomPrefix & "cat.mp4" as text)
             on error error_number number therror
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt"
                 progressField's setStringValue_("")
-                display dialog "The chapters could not be added to concatenated file. The error code was " & therror & ": " & error_number
+                if locale starts with "fr" then
+                    display dialog "The chapters could not be added to concatenated file. The error code was " & therror & ": " & error_number
+                else
+                    display dialog "Les chapitres n'ont pas pu être ajoutés au fichier fusionné. Le code d'erreur était " & therror & ": " & error_number
+                end if
             end try
         end if
         -- Prepare tags
@@ -400,20 +475,32 @@ script DASAppDelegate
         -- Add tags
         if not errorHappened then
             try
-                progressField's setStringValue_("Adding tags...")
+                if locale starts with "fr" then
+                    progressField's setStringValue_("Ajout des balises...")
+                else
+                    progressField's setStringValue_("Adding tags...")
+                end if
                 delay 0.2
                 do shell script (cmdPrefix & "mp4tags " & fcatName & fcatAlbum & fcatArtist & fcatComposer & fcatGenre & fcatTrack & fcatTracks & fcatDisc & fcatDiscs & fcatAlbumArtist & fcatYear & " /private/tmp/" & randomPrefix & "cat.mp4" as text)
             on error error_number number therror
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt"
                 progressField's setStringValue_("")
-                display dialog "The tags could not be added to the concatenated audio file. The error code was " & therror & ": " & error_number
+                if locale starts with "fr" then
+                    display dialog "Les balises n'ont pas pu être ajoutées au fichier audio fusionné. Le code d'erreur était " & therror & ": " & error_number
+                else
+                    display dialog "The tags could not be added to the concatenated audio file. The error code was " & therror & ": " & error_number
+                end if
             end try
         end if
         -- Grab the TOC, if needed
         if not errorHappened then
             if tocToLyricsValue is 1 then
-                progressField's setStringValue_("Getting TOC...")
+                if locale starts with "fr" then
+                    progressField's setStringValue_("Ajout de la table des matières...")
+                else
+                    progressField's setStringValue_("Getting TOC...")
+                end if
                 delay 0.2
                 try
                     set tocText to (do shell script "/bin/cat /private/tmp/" & randomPrefix & "cat.chapters.txt")
@@ -421,7 +508,11 @@ script DASAppDelegate
                     set errorHappened to true
                     do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt"
                     progressField's setStringValue_("")
-                    display dialog "The TOC could not be processed. The error code was " & therror & ": " & error_number
+                    if locale starts with "fr" then
+                        display dialog "Une erreur s'est produite lors de l'ajout de la table des matières. Le code d'erreur était " & therror & ": " & error_number
+                    else
+                        display dialog "The TOC could not be processed. The error code was " & therror & ": " & error_number
+                    end if
                 end try
             end if
         end if
@@ -432,9 +523,17 @@ script DASAppDelegate
                 set hasMusicApp to _versionString ≥ "10.15"
             end considering
             if hasMusicApp then
-                progressField's setStringValue_("Adding to Music app...")
+                if locale starts with "fr" then
+                    progressField's setStringValue_("Ajout à l'appli Musique...")
+                else
+                    progressField's setStringValue_("Adding to Music app...")
+                end if
             else
-                progressField's setStringValue_("Adding to iTunes...")
+                if locale starts with "fr" then
+                    progressField's setStringValue_("Ajout à iTunes...")
+                else
+                    progressField's setStringValue_("Adding to iTunes...")
+                end if
             end if
             delay 0.2
             try
@@ -464,11 +563,15 @@ script DASAppDelegate
                 set errorHappened to true
                 do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt /private/tmp/" & randomPrefix & "cat." & mediaType
                 progressField's setStringValue_("")
-                display dialog "The concatenated file could not be added to iTunes or the Music app.  The error code was " & therror & ": " & error_number
+                if locale starts with "fr" then
+                    display dialog "Le fichier fusionné n'a pas pu être ajouté à iTunes ou à l'appli Musique. Le code d'erreur était " & therror & ": " & error_number
+                else
+                    display dialog "The concatenated file could not be added to iTunes or the Music app.  The error code was " & therror & ": " & error_number
+                end if
             end try
         end if
         if not errorHappened and tocToLyricsValue is 1 then
-            progressField's setStringValue_("Adding TOC...")
+            progressField's setStringValue_("Ajout de la table de matières...")
             -- Apparently fails if file is accessed too quickly
             -- https://bugs.launchpad.net/maxosx/+bug/368342
             delay 2
@@ -488,9 +591,9 @@ script DASAppDelegate
                 end if
             on error error_number number therror
             	try
-            		progressField's setStringValue_("Waiting ten seconds...")
+            		progressField's setStringValue_("Pause de dix secondes...")
             		delay 9
-            		progressField's setStringValue_("Adding TOC...")
+            		progressField's setStringValue_("Ajout de la table de matières...")
             		delay 1
                     set _versionString to system version of (system info)
                     considering numeric strings
@@ -510,7 +613,11 @@ script DASAppDelegate
                 	do shell script "/bin/rm -f /private/tmp/" & randomPrefix & "concat* /private/tmp/" & randomPrefix & "cat.mp4 /private/tmp/" & randomPrefix & "cat.chapters.txt /private/tmp/" & randomPrefix & "cat." & mediaType
                 	progressField's setStringValue_("")
                 	set the clipboard to tocText
-                	display dialog "The lyrics tag for the TOC could not be set in iTunes or the Music app. The error code was " & innererrornumber & ": " & innererror & " The TOC has been copied to the clipboard instead."
+                    if locale starts with "fr" then
+                        display dialog "Erreur lors d'ajouter la table de matières à la balise de paroles. Le code d'erreur était " & innererrornumber & ": " & innererror & " La table des matières a été copiée dans le presse-papiers."
+                    else
+                        display dialog "The lyrics tag for the TOC could not be set in iTunes or the Music app. The error code was " & innererrornumber & ": " & innererror & " The TOC has been copied to the clipboard instead."
+                    end if
             	end try
             end try
         end if

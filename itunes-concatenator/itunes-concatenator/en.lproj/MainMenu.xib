@@ -708,14 +708,25 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <button identifier="btnGetTracks" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yli-T0-dEK">
+                        <rect key="frame" x="14" y="384" width="321" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Get tracks selected in iTunes or the Music app" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="L3V-Go-aP3">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="btnGetTracks:" target="Voe-Tx-rLC" id="6tp-JD-ysI"/>
+                        </connections>
+                    </button>
                     <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Fxg-re-wPE">
                         <rect key="frame" x="0.0" y="368" width="553" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </box>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GLY-yE-X7l">
-                        <rect key="frame" x="18" y="345" width="438" height="17"/>
+                        <rect key="frame" x="18" y="345" width="179" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Tags for concatenated track" id="3R9-Wt-dYA">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Tags for concatenated track" id="3R9-Wt-dYA">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -738,9 +749,9 @@
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KV2-LC-d0X">
-                        <rect key="frame" x="-2" y="310" width="119" height="17"/>
+                        <rect key="frame" x="76" y="310" width="41" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Name" id="o8h-nk-07l">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Name" id="o8h-nk-07l">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -763,18 +774,18 @@
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3lw-9R-xf3">
-                        <rect key="frame" x="-2" y="283" width="119" height="17"/>
+                        <rect key="frame" x="79" y="283" width="38" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Artist" id="1S6-CE-hig">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Artist" id="1S6-CE-hig">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sle-GK-AnP">
-                        <rect key="frame" x="-2" y="256" width="119" height="17"/>
+                        <rect key="frame" x="34" y="256" width="84" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Album Artist" id="shW-pj-Kc0">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Album Artist" id="shW-pj-Kc0">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -797,9 +808,9 @@
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="92W-ZU-oaO">
-                        <rect key="frame" x="-2" y="229" width="119" height="17"/>
+                        <rect key="frame" x="71" y="229" width="46" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Album" id="P0E-aG-3kR">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Album" id="P0E-aG-3kR">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -822,17 +833,16 @@
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bOK-Cz-st6">
-                        <rect key="frame" x="-2" y="203" width="119" height="17"/>
+                        <rect key="frame" x="49" y="202" width="68" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Composer" id="lP7-Ks-4Kc">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Composer" id="lP7-Ks-4Kc">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField identifier="catGenre" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4nl-PB-yJ9">
+                    <textField identifier="catGenre" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4nl-PB-yJ9">
                         <rect key="frame" x="123" y="172" width="331" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="BKD-Zv-dCO">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -847,17 +857,16 @@
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t0r-xm-nou">
-                        <rect key="frame" x="-2" y="175" width="119" height="17"/>
+                        <rect key="frame" x="75" y="175" width="42" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Genre" id="AhV-Lj-yV2">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Genre" id="AhV-Lj-yV2">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField identifier="catTrack" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aSi-4N-lna">
+                    <textField identifier="catTrack" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aSi-4N-lna">
                         <rect key="frame" x="123" y="145" width="39" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="3eg-Jc-JY2">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -871,10 +880,9 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W4f-HN-y6x">
-                        <rect key="frame" x="-2" y="147" width="119" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Track" id="M86-7w-BW5">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W4f-HN-y6x">
+                        <rect key="frame" x="75" y="148" width="39" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Track" id="M86-7w-BW5">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -883,24 +891,22 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dny-1u-iDN">
                         <rect key="frame" x="82" y="118" width="32" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Year" id="rti-w1-spP">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Year" id="rti-w1-spP">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dIy-fO-opW">
-                        <rect key="frame" x="167" y="148" width="24" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="of" id="aDk-YK-Ynr">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dIy-fO-opW">
+                        <rect key="frame" x="168" y="148" width="17" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="of" id="aDk-YK-Ynr">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField identifier="catTracks" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gis-qb-TSE">
-                        <rect key="frame" x="197" y="145" width="39" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textField identifier="catTracks" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gis-qb-TSE">
+                        <rect key="frame" x="191" y="145" width="39" height="22"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Pgl-CA-Fbl">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -914,9 +920,8 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField identifier="catDisc" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8uJ-Y0-LZw">
-                        <rect key="frame" x="317" y="145" width="39" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textField identifier="catDisc" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8uJ-Y0-LZw">
+                        <rect key="frame" x="302" y="145" width="39" height="22"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="NqM-RC-gSy">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -930,18 +935,19 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1KH-7D-CLv">
-                        <rect key="frame" x="358" y="148" width="26" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="of" id="YOZ-VQ-DFl">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1KH-7D-CLv">
+                        <rect key="frame" x="347" y="148" width="17" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="17" id="gWq-Vr-zZX"/>
+                        </constraints>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="of" id="YOZ-VQ-DFl">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField identifier="catDiscs" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pcf-8a-heY">
-                        <rect key="frame" x="387" y="146" width="39" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textField identifier="catDiscs" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pcf-8a-heY">
+                        <rect key="frame" x="370" y="145" width="39" height="22"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="5CX-YN-xhc">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -955,9 +961,8 @@
                             </binding>
                         </connections>
                     </textField>
-                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="dR3-0v-Z56">
+                    <box verticalHuggingPriority="750" ambiguous="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="dR3-0v-Z56">
                         <rect key="frame" x="0.0" y="99" width="553" height="5"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </box>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xF9-P7-MKT">
                         <rect key="frame" x="385" y="17" width="139" height="64"/>
@@ -1007,34 +1012,42 @@
                         </textFieldCell>
                     </textField>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVz-Gf-1WZ">
-                        <rect key="frame" x="223" y="117" width="301" height="18"/>
+                        <rect key="frame" x="223" y="117" width="130" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="TOC to Lyrics tag" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="RJj-2n-hJA">
+                        <buttonCell key="cell" type="check" title="TOC to Lyrics tag" bezelStyle="regularSquare" imagePosition="left" inset="2" id="RJj-2n-hJA">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8q-qe-zse">
-                        <rect key="frame" x="257" y="148" width="54" height="17"/>
+                        <rect key="frame" x="257" y="147" width="39" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Disc" id="SDI-kh-IV4">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Disc" id="SDI-kh-IV4">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button identifier="btnGetTracks" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yli-T0-dEK">
-                        <rect key="frame" x="86" y="384" width="380" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="Get tracks selected in iTunes or the Music app" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="L3V-Go-aP3">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="btnGetTracks:" target="Voe-Tx-rLC" id="6tp-JD-ysI"/>
-                        </connections>
-                    </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="aSi-4N-lna" secondAttribute="baseline" id="2AJ-G5-q56"/>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="top" secondItem="4nl-PB-yJ9" secondAttribute="bottom" constant="7" id="3T6-cZ-oLv"/>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="gis-qb-TSE" secondAttribute="firstBaseline" id="6eN-jR-OCc"/>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="pcf-8a-heY" secondAttribute="baseline" id="76q-IR-TCk"/>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="gis-qb-TSE" secondAttribute="baseline" id="CYy-zf-nZ0"/>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="dIy-fO-opW" secondAttribute="firstBaseline" id="DDp-6G-HJa"/>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="aSi-4N-lna" secondAttribute="firstBaseline" id="Kil-Yn-RXU"/>
+                    <constraint firstAttribute="bottom" secondItem="1KH-7D-CLv" secondAttribute="bottom" constant="148" id="Qk1-qg-4IV"/>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="W4f-HN-y6x" secondAttribute="firstBaseline" id="Rms-Ch-pMc"/>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="pcf-8a-heY" secondAttribute="firstBaseline" id="SSm-0X-31U"/>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="8uJ-Y0-LZw" secondAttribute="firstBaseline" id="Vhz-4X-mPc"/>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="dIy-fO-opW" secondAttribute="baseline" id="cer-WV-VhQ"/>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="W4f-HN-y6x" secondAttribute="baseline" id="grN-Q2-asH"/>
+                    <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="8uJ-Y0-LZw" secondAttribute="baseline" id="j9k-Zh-tX2"/>
+                    <constraint firstAttribute="trailing" secondItem="1KH-7D-CLv" secondAttribute="trailing" constant="191" id="jsF-pv-3Uf"/>
+                    <constraint firstItem="dR3-0v-Z56" firstAttribute="top" secondItem="1KH-7D-CLv" secondAttribute="bottom" constant="46" id="rjs-ZK-wNs"/>
+                    <constraint firstItem="pcf-8a-heY" firstAttribute="leading" secondItem="1KH-7D-CLv" secondAttribute="trailing" constant="8" symbolic="YES" id="wU2-D8-z1q"/>
+                </constraints>
             </view>
             <point key="canvasLocation" x="142.5" y="-236"/>
         </window>
