@@ -2,7 +2,7 @@ Like [Join Together](http://dougscripts.com/itunes/itinfo/jointogether.php), but
 
 Works both in macOS 10.15 Catalina's Music app as well as in iTunes on earlier versions from at least Mac OS X 10.9.
 
-Download the latest version: [Track Concatenator](https://github.com/davidschlachter/itunes-concatenator/raw/master/bin/Track-Concatenator_2020-08-15.zip)
+Download the latest version: [Track Concatenator](https://www.davidschlachter.com/misc/trackconcat-latest)
 
 More information at [Track Concatenator homepage](https://www.davidschlachter.com/misc/trackconcat).
 
