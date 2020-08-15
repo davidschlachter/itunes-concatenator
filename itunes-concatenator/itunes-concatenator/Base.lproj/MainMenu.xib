@@ -935,14 +935,6 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tP2-UA-0hk">
-                        <rect key="frame" x="265" y="148" width="31" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Disc" id="FX3-RG-Za7">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1KH-7D-CLv">
                         <rect key="frame" x="347" y="148" width="17" height="17"/>
                         <constraints>
@@ -1027,27 +1019,32 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8q-qe-zse">
+                        <rect key="frame" x="257" y="147" width="39" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Disc" id="SDI-kh-IV4">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="aSi-4N-lna" secondAttribute="baseline" id="2AJ-G5-q56"/>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="top" secondItem="4nl-PB-yJ9" secondAttribute="bottom" constant="7" id="3T6-cZ-oLv"/>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="gis-qb-TSE" secondAttribute="firstBaseline" id="6eN-jR-OCc"/>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="pcf-8a-heY" secondAttribute="baseline" id="76q-IR-TCk"/>
-                    <constraint firstItem="1KH-7D-CLv" firstAttribute="leading" secondItem="8uJ-Y0-LZw" secondAttribute="trailing" constant="8" symbolic="YES" id="AXp-1z-Aj7"/>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="gis-qb-TSE" secondAttribute="baseline" id="CYy-zf-nZ0"/>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="dIy-fO-opW" secondAttribute="firstBaseline" id="DDp-6G-HJa"/>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="aSi-4N-lna" secondAttribute="firstBaseline" id="Kil-Yn-RXU"/>
-                    <constraint firstItem="1KH-7D-CLv" firstAttribute="leading" secondItem="8uJ-Y0-LZw" secondAttribute="trailing" constant="8" id="OsZ-lC-RDE"/>
                     <constraint firstAttribute="bottom" secondItem="1KH-7D-CLv" secondAttribute="bottom" constant="148" id="Qk1-qg-4IV"/>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="W4f-HN-y6x" secondAttribute="firstBaseline" id="Rms-Ch-pMc"/>
-                    <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="tP2-UA-0hk" secondAttribute="firstBaseline" id="Rxq-aq-cS6"/>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="pcf-8a-heY" secondAttribute="firstBaseline" id="SSm-0X-31U"/>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="firstBaseline" secondItem="8uJ-Y0-LZw" secondAttribute="firstBaseline" id="Vhz-4X-mPc"/>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="dIy-fO-opW" secondAttribute="baseline" id="cer-WV-VhQ"/>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="W4f-HN-y6x" secondAttribute="baseline" id="grN-Q2-asH"/>
                     <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="8uJ-Y0-LZw" secondAttribute="baseline" id="j9k-Zh-tX2"/>
                     <constraint firstAttribute="trailing" secondItem="1KH-7D-CLv" secondAttribute="trailing" constant="191" id="jsF-pv-3Uf"/>
-                    <constraint firstItem="1KH-7D-CLv" firstAttribute="baseline" secondItem="tP2-UA-0hk" secondAttribute="baseline" id="nce-3h-v3E"/>
                     <constraint firstItem="dR3-0v-Z56" firstAttribute="top" secondItem="1KH-7D-CLv" secondAttribute="bottom" constant="46" id="rjs-ZK-wNs"/>
                     <constraint firstItem="pcf-8a-heY" firstAttribute="leading" secondItem="1KH-7D-CLv" secondAttribute="trailing" constant="8" symbolic="YES" id="wU2-D8-z1q"/>
                 </constraints>
