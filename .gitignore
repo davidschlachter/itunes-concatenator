@@ -18,6 +18,12 @@
 *.lock
 profile
 
+# Resource forks
+._*
+
+# NFS locks
+.nfs.*
+
 
 ####
 # Xcode temporary files that should never be committed
